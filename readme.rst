@@ -24,8 +24,33 @@ PHP version 5.4 or newer, same as the original CI3 requirements.
 Installation
 ************
 
-Simple: Just use composer.
+You can install this fork using Composer:
 
 .. code-block:: bash
 
 	composer require pocketarc/codeigniter
+
+After installation, you need to point CodeIgniter to the new system directory. In your `index.php` file, update the `$system_path` variable:
+
+.. code-block:: php
+
+	$system_path = 'vendor/pocketarc/codeigniter/system';
+
+**Alternative Installation (Manual)**
+
+If you prefer the traditional approach of replacing the system directory:
+
+1. Download this repository
+2. Replace your existing `system/` directory with the one from this fork
+3. No changes to `index.php` are needed with this method
+
+**Note:** The Composer method makes future updates easier with `composer update`, while the manual method requires downloading and replacing the system directory each time.
+
+**Upgrading from Original CI3**
+
+If you're migrating from the original CodeIgniter 3.x:
+
+1. Install via Composer as shown above
+2. Update the `$system_path` in your `index.php`
+3. Your existing `application/` directory remains unchanged
+4. Test thoroughly with your PHP version (especially if using PHP 8.2+)
