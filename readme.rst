@@ -48,9 +48,15 @@ If you prefer the traditional approach of replacing the system directory:
 
 **Upgrading from Original CI3**
 
-If you're migrating from the original CodeIgniter 3.x:
+⚠️ **Important:** This fork is based on the unreleased CodeIgniter 3.2.0-dev version, not the stable 3.1.13. If you're upgrading from CI 3.1.x, please read the upgrade guide for any changes that may affect your application.
 
-1. Install via Composer as shown above
-2. Update the `$system_path` in your `index.php`
-3. Your existing `application/` directory remains unchanged
-4. Test thoroughly with your PHP version (especially if using PHP 8.2+)
+**Please review the upgrade guide:** `upgrade_320.rst <user_guide_src/source/installation/upgrade_320.rst>`_
+
+Steps to upgrade:
+
+1. Review the upgrade guide for breaking changes between 3.1.x and 3.2.0
+2. Install via Composer as shown above
+3. Update the `$system_path` in your `index.php`
+4. Apply any necessary changes from the upgrade guide to your application
+5. Your existing `application/` directory remains mostly unchanged (except for items noted in the upgrade guide)
+6. Test thoroughly with your PHP version (especially if using PHP 8.2+)
