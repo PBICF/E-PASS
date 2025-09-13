@@ -1281,6 +1281,14 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 	 */
 	public function order_by($orderby, $direction = '', $escape = NULL)
 	{
+		if ($direction === null) {
+			$direction = '';
+		}
+
+		if (!is_string($direction)) {
+			throw new InvalidArgumentException('order_by() expects parameter 2 to be a string, ' . gettype($direction) . ' given');
+		}
+
 		$direction = strtoupper(trim($direction));
 
 		if ($direction === 'RANDOM')
