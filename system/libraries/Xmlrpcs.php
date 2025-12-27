@@ -244,10 +244,9 @@ class CI_Xmlrpcs extends CI_Xmlrpc {
 			'method' => ''
 		);
 
-		xml_set_object($parser, $parser_object);
 		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, TRUE);
-		xml_set_element_handler($parser, 'open_tag', 'closing_tag');
-		xml_set_character_data_handler($parser, 'character_data');
+		xml_set_element_handler($parser, [$parser_object, 'open_tag'], [$parser_object, 'closing_tag']);
+		xml_set_character_data_handler($parser, [$parser_object, 'character_data']);
 		//xml_set_default_handler($parser, 'default_handler');
 
 		//-------------------------------------
