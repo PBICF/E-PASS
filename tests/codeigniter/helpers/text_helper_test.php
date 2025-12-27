@@ -101,8 +101,8 @@ class Text_helper_test extends CI_TestCase {
 
 	public function test_highlight_code()
 	{
-		// PHP 8.4 changed highlight_string() output format
-		if (PHP_VERSION_ID >= 80400)
+		// PHP 8.3 changed highlight_string() output format
+		if (PHP_VERSION_ID >= 80300)
 		{
 			$expect = "<pre><code style=\"color: #000000\"><span style=\"color: #0000BB\">&lt;?php var_dump</span><span style=\"color: #007700\">(</span><span style=\"color: #0000BB\">\$this</span><span style=\"color: #007700\">); </span><span style=\"color: #0000BB\">?&gt; ?&gt;</span></code></pre>";
 		}
