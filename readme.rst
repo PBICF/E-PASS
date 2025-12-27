@@ -2,6 +2,20 @@
 What is this repository?
 ########################
 
+.. image:: https://github.com/pocketarc/codeigniter/actions/workflows/test-phpunit.yml/badge.svg?branch=develop
+   :target: https://github.com/pocketarc/codeigniter/actions/workflows/test-phpunit.yml
+   :alt: PHPUnit Tests
+
+.. image:: https://img.shields.io/badge/PHP-5.4%20--%208.5-8892BF?logo=php
+   :alt: PHP 5.4 - 8.5
+
+.. image:: https://img.shields.io/packagist/v/pocketarc/codeigniter
+   :target: https://packagist.org/packages/pocketarc/codeigniter
+   :alt: Packagist Version
+
+.. image:: https://img.shields.io/packagist/dt/pocketarc/codeigniter
+   :alt: Packagist Downloads
+
 This is a fork of CodeIgniter 3, with the goal of keeping it up to date with modern PHP versions. There is no intention to add new features or change the way CI3 works. This is purely a maintenance fork.
 
 **PHP Compatibility:**
