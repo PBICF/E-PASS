@@ -45,7 +45,30 @@ class Log_test extends CI_TestCase {
 		$this->assertEquals($enabled->getValue($instance), TRUE);
 	}
 
-	// --------------------------------------------------------------------
+	public function test_log_file_extension_backward_compatibility()
+	{
+		$filename = new ReflectionProperty('CI_Log', '_log_filename');
+		$filename->setAccessible(TRUE);
+
+		$this->ci_set_config('log_path', '');
+		$this->ci_set_config('log_threshold', 0);
+		$this->ci_set_config('log_filename', '');
+		$this->ci_set_config('log_file_extension', 'txt');
+		$instance = new CI_Log();
+
+		$this->assertEquals($filename->getValue($instance), 'log-'.date('Y-m-d').'.txt');
+
+		$this->ci_set_config('log_file_extension', '.log');
+		$instance = new CI_Log();
+
+		$this->assertEquals($filename->getValue($instance), 'log-'.date('Y-m-d').'.log');
+
+		$this->ci_set_config('log_filename', 'custom.log');
+		$this->ci_set_config('log_file_extension', 'txt');
+		$instance = new CI_Log();
+
+		$this->assertEquals($filename->getValue($instance), 'custom.log');
+	}
 
 	public function test_format_line()
 	{
