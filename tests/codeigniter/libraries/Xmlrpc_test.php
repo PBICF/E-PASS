@@ -12,7 +12,10 @@ class Xmlrpc_test extends CI_TestCase {
 		$this->input = new CI_Input($security);
 
 		$this->input_lib_raw_stream = new ReflectionProperty($this->input, '_raw_input_stream');
-		$this->input_lib_raw_stream->setAccessible(TRUE);
+		if (PHP_VERSION_ID < 80100)
+		{
+			$this->input_lib_raw_stream->setAccessible(TRUE);
+		}
 
 		$this->ci_instance_var('input', $this->input);
 		$this->ci_instance_var('security', $security);

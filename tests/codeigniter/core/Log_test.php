@@ -4,17 +4,20 @@ class Log_test extends CI_TestCase {
 	public function test_configuration()
 	{
 		$path       = new ReflectionProperty('CI_Log', '_log_path');
-		$path->setAccessible(TRUE);
 		$threshold  = new ReflectionProperty('CI_Log', '_threshold');
-		$threshold->setAccessible(TRUE);
 		$date_fmt   = new ReflectionProperty('CI_Log', '_date_fmt');
-		$date_fmt->setAccessible(TRUE);
 		$filename   = new ReflectionProperty('CI_Log', '_log_filename');
-		$filename->setAccessible(TRUE);
 		$file_perms = new ReflectionProperty('CI_Log', '_file_permissions');
-		$file_perms->setAccessible(TRUE);
 		$enabled    = new ReflectionProperty('CI_Log', '_enabled');
-		$enabled->setAccessible(TRUE);
+		if (PHP_VERSION_ID < 80100)
+		{
+			$path->setAccessible(TRUE);
+			$threshold->setAccessible(TRUE);
+			$date_fmt->setAccessible(TRUE);
+			$filename->setAccessible(TRUE);
+			$file_perms->setAccessible(TRUE);
+			$enabled->setAccessible(TRUE);
+		}
 
 		$this->ci_set_config('log_path', $this->ci_readonly_dir->url());
 		$this->ci_set_config('log_threshold', 'z');
@@ -48,7 +51,10 @@ class Log_test extends CI_TestCase {
 	public function test_log_file_extension_backward_compatibility()
 	{
 		$filename = new ReflectionProperty('CI_Log', '_log_filename');
-		$filename->setAccessible(TRUE);
+		if (PHP_VERSION_ID < 80100)
+		{
+			$filename->setAccessible(TRUE);
+		}
 
 		$this->ci_set_config('log_path', '');
 		$this->ci_set_config('log_threshold', 0);
@@ -77,7 +83,10 @@ class Log_test extends CI_TestCase {
 		$instance = new CI_Log();
 
 		$format_line = new ReflectionMethod($instance, '_format_line');
-		$format_line->setAccessible(TRUE);
+		if (PHP_VERSION_ID < 80100)
+		{
+			$format_line->setAccessible(TRUE);
+		}
 		$this->assertEquals(
 			$format_line->invoke($instance, 'LEVEL', 'Timestamp', 'Message'),
 			"LEVEL - Timestamp --> Message".PHP_EOL
