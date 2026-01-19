@@ -41,8 +41,10 @@ This fork commits to:
 - Maintaining compatibility with each new PHP version while still supporting PHP 5.4+
 - Applying critical security fixes
 - Keeping changes minimal to preserve CI3 behavior
-- Reverting unnecessary breaking changes in CodeIgniter 3.2.0-dev
+- Reverting breaking changes in CodeIgniter 3.2.0-dev to maintain backward compatibility (e.g. restoring the Cart library, Email helper, and other deprecated-but-removed functionality)
 - Running the full CI3 test suite on PHP 8.2+
+
+If you find something that was removed in CI 3.2.0-dev and breaks backward compatibility for your application, please open an issue. We're happy to restore it.
 
 This fork does NOT:
 
@@ -94,6 +96,8 @@ If you prefer the traditional approach of replacing the system directory:
 ⚠️ **Important:** This fork is based on the unreleased CodeIgniter 3.2.0-dev version, not the stable 3.1.13. If you're upgrading from CI 3.1.x, please read the upgrade guide for any changes that may affect your application.
 
 **Please review the upgrade guide:** `upgrade_320.rst <user_guide_src/source/installation/upgrade_320.rst>`_
+
+Note: The upgrade guide has been updated to reflect functionality we've restored for backward compatibility (Cart library, Email helper, etc.).
 
 Steps to upgrade:
 
