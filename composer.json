@@ -8,7 +8,8 @@
 		"source": "https://github.com/pocketarc/codeigniter"
 	},
 	"require": {
-		"php": ">=5.4.8"
+		"php": ">=5.4.8",
+		"eftec/bladeone": "*"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

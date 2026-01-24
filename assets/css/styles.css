@@ -1,0 +1,291 @@
+@font-face {
+    font-family: 'krishna';
+    src: url('../fonts/krishna.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Theme Variables */
+/* Base */
+:root {
+    --bg-light: #f8fafc;
+    --bg-dark: #18223bee;
+    --card-light: #ffffff;
+    --card-dark: #020617b7;
+    --text-light: #0f172a;
+    --text-dark: #e5e7eb;
+    --primary: #6366f1;
+}
+
+/* Smooth look */
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease !important;
+    transition: border-color 0.5s ease, color 0.3s ease !important;
+}
+
+/* Body */
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    /* transition: background-color 0.3s ease, color 0.3s ease; */
+}
+
+/* Card */
+.card {
+    background-color: var(--card-light);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control,
+.form-select {
+    background-color: var(--card-light);
+    color: var(--text-light);
+    border-color: #e2e8f0;
+}
+
+.form-control::placeholder {
+    color: #94a3b8;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5 {
+    font-weight: 600;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary);
+    border: none;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+.navbar h2.title {
+    color: #fff;
+    font-size: 24px;
+    font-weight: 900;
+    float: inline-end;
+    justify-self: center;
+    align-self: auto;
+    margin: 8px 20px;
+    text-transform: uppercase;
+}
+
+.theme-toggle {
+    width: 56px;
+    height: 30px;
+    border-radius: 999px;
+    border: none;
+    padding: 3px;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.25s ease;
+}
+
+/* Knob */
+.theme-toggle .knob {
+    width: 24px;
+    height: 24px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.25s ease;
+}
+
+/* Slide right when dark */
+.theme-toggle.is-dark .knob {
+    transform: translateX(26px);
+}
+
+.form-check-input:checked {
+    background-image: none;
+}
+
+/* Theme handling */
+[data-theme="light"] {
+    background-color: var(--bg-light);
+    color: var(--text-light);
+}
+
+[data-theme="dark"] {
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
+}
+
+[data-theme="dark"] .card {
+    background-color: var(--card-dark);
+}
+
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+    background-color: var(--card-dark);
+    color: var(--text-dark);
+    border-color: #1e293b;
+}
+
+[data-theme="dark"] .form-control::placeholder {
+    color: #64748b;
+}
+
+/* Light mode appearance */
+[data-theme="light"] .theme-toggle {
+    background-color: #adb5bd;
+}
+
+/* Dark mode appearance */
+[data-theme="dark"] .theme-toggle {
+    background-color: #0d6efd;
+}
+
+[data-theme="dark"] .form-check-input:not(:checked) {
+    background-color: var(--card-dark);
+    border-color: #1e293b;
+}
+
+[data-theme="dark"] .form-check-input:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* [data-theme="light"] input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(20%);
+} */
+
+[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(60%);
+}
+
+[data-theme="dark"] .form-label,
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+    color: var(--card-light);
+}
+
+[data-theme="dark"] table thead th {
+    color: var(--card-light);
+}
+
+[data-theme="dark"] .text-dark {
+    color: #e2e8f0 !important;
+}
+
+.btn-gradient:hover,
+.btn-gradient {
+    color: #ffffff;
+    background: linear-gradient(135deg, #dc3545, #fd7e14) !important;
+}
+
+/** Navbar */
+.bg-gradient {
+    background: linear-gradient(135deg, #dc3545, #fd7e14) !important;
+}
+
+.border-gradient {
+    border-bottom: linear-gradient(135deg, #dc3545, #fd7e14) !important;
+}
+
+.custom-check:checked {
+    background-color: #E2433B; /* blue */
+    border-color: #E2433B;
+}
+
+.custom-check:focus {
+    box-shadow: 0 0 0 0.15rem #DD3744;
+}
+
+/** jQuery UI */
+.ui-widget-header {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #dc3545, #fd7e14) !important;
+}
+
+.ui-state-active, 
+.ui-widget-content .ui-state-active, 
+.ui-widget-header .ui-state-active, 
+a.ui-button:active, 
+.ui-button:active {
+    color: #ffffff;
+    border: 1px solid #dc3545;
+    background: linear-gradient(135deg, #dc3545, #fd7e14) !important;
+}
+
+.ui-button.ui-state-active:hover {
+    color: #333;
+}
+
+.ui-datepicker .ui-datepicker-prev-hover {
+    top: 2px !important;
+	left: 2px !important;
+}
+.ui-datepicker .ui-datepicker-next-hover {
+    top: 2px !important;
+	right: 2px !important;
+}
+
+.ui-widget-header a {
+    color: #f8fafc;
+    font-weight: bold;
+}
+
+a.ui-datepicker-prev.ui-corner-all,
+a.ui-datepicker-next.ui-corner-all,
+a.ui-datepicker-prev .ui-state-hover .ui-datepicker-prev-hover,
+a.ui-datepicker-next .ui-state-hover .ui-datepicker-next-hover {
+	border: 0px solid transparent;
+	background: transparent;
+	font-weight: normal;
+	color: #f8fafc;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.hindi-font {
+    font-family: 'krishna', serif !important;
+    /* font-size: larger; */
+}
+
+.green-section {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: #fff;
+}
+
+.blue-section {
+    background: linear-gradient(135deg, #007bff, #17a2b8);
+    color: #fff;
+}
+
+.orange-section {
+    background: linear-gradient(135deg, #fd7e14, #ffc107);
+    color: #fff;
+}
+
+.purple-section {
+    background: linear-gradient(135deg, #6f42c1, #d63384);
+    color: #fff;
+}
+/* SweetAlert2 */
+.swal2-popup .swal2-icon {
+    font-size: 0.55rem !important;
+}
+
+.swal2-container .swal2-title {
+    font-size: 1rem !important;
+}
+
+.swal2-container .swal2-html-container {
+    font-size: 0.9rem !important;
+    padding: 0.8em 1em 0.3em !important;
+}
+
+.swal2-container button.swal2-styled {
+    font-size: 0.8rem !important;
+}
+
+.swal2-container button.swal2-styled.swal2-confirm {
+    background-color: var(--bs-primary) !important;
+}

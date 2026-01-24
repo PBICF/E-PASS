@@ -49,6 +49,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'welcome';
-$route['404_override'] = '';
-$route['translate_uri_dashes'] = FALSE;
+
+// AJAX / API
+$route['api/employees/inquire']     = 'Ajax_Controller/inquire';
+$route['api/employee/family']       = 'Ajax_Controller/get_family';
+$route['api/family/update']         = 'Ajax_Controller/update_family';
+$route['api/routes']                = 'Ajax_Controller/routes';
+
+// Pass creation
+$route['pass/create']               = 'Pass_Controller/create';
+$route['pass/submit']               = 'Pass_Controller/submit';  
+
+// Pass Print
+$route['print']                     = 'Home_Controller/print';
+$route['print/pass/(:num)']         = 'Home_Controller/print_pass/$1';
+$route['print/pass']                = 'Home_Controller/print_pass';
+$route['pass/(:num)/pdf']           = 'Home_Controller/render_pass/$1';
+$route['print/pass/(:num)']         = 'Home_Controller/print_pass/$1';
+
+$route['pass/account/update']       = 'Update_Controller/pass_account';
+$route['pass/employee/update']      = 'Update_Controller/employee_update';
+$route['pass/family/update']        = 'Update_Controller/family_update';
+
+$route['default_controller']        = 'Pass_Controller';
+$route['404_override']              = 'errors/page_missing';
+$route['translate_uri_dashes']      = FALSE;
