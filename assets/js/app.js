@@ -96,7 +96,6 @@ function swalAlert({
         }
 
         Swal.fire(options).then((result) => {
-
             // Backward compatible callback
             if (typeof callback === "function") {
                 callback(result);
