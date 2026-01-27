@@ -75,29 +75,36 @@ function swalAlert({
     callback = null
 } = {}) {
 
-    const options = {
-        title: title,
-        text: message,
-        icon: icon,
-        width: '350px',
-        heightAuto: false,
-        showCancelButton: !!confirmButtonText,
-        showCancelButton: true,
-        cancelButtonText: "Cancel",
-    };
+    return new Promise((resolve) => {
 
-    // Confirm or Auto-close
-    if (confirmButtonText) {
-        options.showConfirmButton = true;
-        options.confirmButtonText = confirmButtonText;
-    } else {
-        options.showConfirmButton = false;
-        options.timerProgressBar = true;
-    }
+        const options = {
+            title: title,
+            text: message,
+            icon: icon,
+            width: '350px',
+            heightAuto: false,
+            showCancelButton: true,
+            cancelButtonText: "Cancel",
+        };
 
-    Swal.fire(options).then((result) => {
-        if (typeof callback === "function") {
-            callback(result);
+        if (confirmButtonText) {
+            options.showConfirmButton = true;
+            options.confirmButtonText = confirmButtonText;
+        } else {
+            options.showConfirmButton = false;
+            options.timerProgressBar = true;
         }
+
+        Swal.fire(options).then((result) => {
+
+            // Backward compatible callback
+            if (typeof callback === "function") {
+                callback(result);
+            }
+
+            // Resolve the promise for async/await
+            resolve(result);
+        });
     });
 }
+

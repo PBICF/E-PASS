@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!e.target.checked) {
                 // Immediately sync values
                 syncReturnFromBreak();
-                // syncReturnFromVia();
+                syncReturnFromVia();
 
                 // ensure disabled if Alpine hasn't yet applied it
                 viaReturnInputs.forEach(i => i.setAttribute('disabled', 'disabled'));

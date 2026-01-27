@@ -34,6 +34,18 @@ class Employee_model extends CI_Model {
             ->row_array();
     }
 
+    public function is_serving(int $employee_no)
+    {
+        $result = $this->db
+            ->select('DTRETT')
+            ->where('EMPNO', $employee_no)
+            ->get($this->table)
+            ->row_array();
+
+        return $result['DTRETT'] === null;
+    }
+    
+
     public function update(int $empno, array $data)
     {
         foreach ($this->date_columns as $col) {

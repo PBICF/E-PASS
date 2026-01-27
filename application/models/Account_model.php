@@ -126,6 +126,7 @@ class Account_model extends CI_Model {
         } elseif ($type === 'PASS') {
             $this->db->set('PASS_AVAILED', "PASS_AVAILED + {$amount}", false);
         } elseif ($type === '2AC') {
+            $this->db->set('PASS_AVAILED', "PASS_AVAILED + {$amount}", false);
             $this->db->set('SECONDA_AVAILED', "SECONDA_AVAILED + {$amount}", false);
         }
 

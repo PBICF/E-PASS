@@ -51,7 +51,7 @@ class Pass_Controller extends CI_Controller {
             return redirect('pass/create');
         }
 
-        $current_tab = (int) $this->input->post('current_tab');        
+        $current_tab = (int) $this->input->post('current_tab');
         $groups = [
             1 => 'account_validation',
             2 => 'family_validation',
@@ -76,10 +76,6 @@ class Pass_Controller extends CI_Controller {
         if ($current_tab === 3) {
             $this->trans->create_pass($this->input->post());
 
-            // return redirect_with(
-            //     'print/pass/' . $this->input->post('pass_no'),
-            //     ['success' => 'Pass created successfully.']
-            // );
             $pass_no = $this->input->post('pass_no');
             return redirect_with('pass/' . $pass_no . '/pdf');
         }
@@ -87,7 +83,7 @@ class Pass_Controller extends CI_Controller {
         // Move to next tab
         return redirect_with('pass/create', [
             'old'         => $this->input->post(),
-            'current_tab' => ($current_tab + 1)
+            'current_tab' => ($current_tab + 1),
         ]);
     }
 

@@ -149,17 +149,8 @@
                                                 class="form-check-input custom-check"
                                                 type="checkbox"
                                                 name="account_year"
-                                                :checked="selection.type === 'PASS' && selection.year === p.year"
-                                                x-on:change="
-                                                    if ($event.target.checked) {
-                                                        selection.type = 'PASS';
-                                                        selection.year = p.year;
-                                                    } else {
-                                                        selection.type = null;
-                                                        selection.year = null;
-                                                    }
-                                                    console.log(selection.type, selection.year);
-                                                "
+                                                :checked="(selection.type === 'PASS' && selection.year === p.year) || (selection.type === '2AC' && selection.year === p.year)"
+                                                x-on:change="onAccountYearChange($event, 'PASS', p.year)"
                                             >
                                         </td>
                                         <td>
@@ -206,16 +197,7 @@
                                                 type="checkbox"
                                                 name="account_year"
                                                 :checked="selection.type === '2AC' && selection.year === p.year"
-                                                x-on:change="
-                                                    if ($event.target.checked) {
-                                                        selection.type = '2AC';
-                                                        selection.year = p.year;
-                                                    } else {
-                                                        selection.type = null;
-                                                        selection.year = null;
-                                                    }
-                                                    console.log(selection.type, selection.year);
-                                                "
+                                                x-on:change="onAccountYearChange($event, '2AC', p.year)"
                                             >
                                         </td>
                                         <td>
@@ -263,17 +245,7 @@
                                                 type="checkbox"
                                                 name="account_year"
                                                 :checked="selection.type === 'PTO' && selection.year === p.year"
-                                                x-on:change="
-                                                    if ($event.target.checked) {
-                                                        selection.type = 'PTO';
-                                                        selection.year = p.year;
-                                                    } else {
-                                                        selection.type = null;
-                                                        selection.year = null;
-                                                    }
-                                                    console.log(selection.type, selection.year);
-                                                "
-                                            >
+                                                x-on:change="onAccountYearChange($event, 'PTO', p.year)">
                                         </td>
                                         <td>
                                             <span x-text="p.year"></span>
@@ -370,7 +342,7 @@
             </div>
         </div>
     </div>
-    <div class="row" x-show="currentStep === 3">.
+    <div class="row" x-show="currentStep === 3">
         <div class="col-md-12">
             <div class="card emp-card shadow-sm p-0">
                 <div class="card-body p-3">
@@ -409,7 +381,7 @@
                                     <option
                                         value="{{ $type['TCODE'] }}"
                                         @selected(old_input('pass_type') == $type['TCODE'])
-                                        :disabled="selection.type == '' && [1,3].includes({{ $type['TCODE'] }})">
+                                        :disabled="selection.type == '' && [1,3].includes({{ $type['TCODE'] }}) || (is_serving && {{ $type['TCODE'] }} == 3) || (!is_serving && {{ $type['TCODE'] }} == 2) ">
                                         {{ $type['TNAME'] }}
                                     </option>
                                 @endforeach
@@ -663,10 +635,19 @@
 
                 this.validityTo = formatDate(today);
             },
-            submit() {
+            onAccountYearChange($event, type, year) {
+                if ($event.target.checked) {
+                    this.selection.type = type;
+                    this.selection.year = year;
+                    return;
+                }
+
+                this.selection.type, this.selection.year = null;
+            },
+            async submit() {
                 if (this.currentStep === 1) {
                     if (!this.employee.empno) {
-                        swalAlert({
+                        await swalAlert({
                             icon: 'warning',
                             title: 'Error!',
                             showCancelButton: true,
@@ -676,18 +657,14 @@
                     }
 
                     if (!this.selection.type || !this.selection.year) {
-                        swalAlert({
+                        let result = await swalAlert({
                             icon: 'info',
                             title: 'Proceed without PASS/PTO account?',
                             confirmButtonText: 'Okay',
                             message: 'You have not selected an account year (PASS or PTO). Do you want to continue?',
-                            callback: function (result) {
-                                if(result.isConfirmed === true) {
-                                    $('form').trigger('submit');
-                                }
-                            }  
                         });
-                        return;
+
+                        if (!result.isConfirmed) return;
                     } else {
                         let account = this.selection.type == 'PASS' 
                             ? this.pass.find(item => item.year === this.selection.year) 
@@ -696,22 +673,22 @@
                             : this.second_pass.find(item => item.year === this.selection.year));
 
                         if(account.balance <= 0) {
-                            return swalAlert({
+                            await swalAlert({
                                 icon: 'warning',
                                 title: 'Error!',
                                 showCancelButton: true,
                                 message: 'The account does not have enough balance for the selected pass type.',
-                            });                            
+                            });
+
+                            return;
                         }
                     }
-
-                    $('form').trigger('submit');
                 }
 
                 // When moving from Step 2 -> Step 3 ensure at least one family member is selected
                 if (this.currentStep === 2) {
                     if (!this.selectedMembers || !this.selectedMembers.length) {
-                        swalAlert({
+                        await swalAlert({
                             icon: 'warning',
                             title: 'Error!',
                             showCancelButton: true,
@@ -719,70 +696,69 @@
                         });
                         return;
                     }
-
-                    $('form').trigger('submit');
                 }
 
                 if (this.currentStep === 3) {
-                    if($('input[name="from_station_code"]').val().trim() == '') {
-                        swalAlert({
+                    if ($('input[name="from_station_code"]').val().trim() === '') {
+                        await swalAlert({
                             icon: 'error',
                             title: 'From Station code required',
-                            showCancelButton: true,
-                            cancelButtonText: 'Close', 
                             message: 'Please enter from station code.',
                         });
-
                         return;
                     }
-                    
-                    if($('input[name="to_station_code"]').val().trim() == '') {
-                        swalAlert({
+
+                    if ($('input[name="to_station_code"]').val().trim() === '') {
+                        await swalAlert({
                             icon: 'error',
                             title: 'To Station code required',
-                            showCancelButton: true,
-                            cancelButtonText: 'Close', 
                             message: 'Please enter to station code.',
                         });
-
                         return;
                     }
 
-                    var via = $('input[name="via[]"]').map(function() {
-                        if(this.value !== '' ) return this.value;
+                    const via = $('input[name="via[]"]').map(function () {
+                        return this.value !== '' ? this.value : null;
                     }).get();
-                    
 
-                    if([1, 3].includes(Number(this.passType)) && (this.selection.type == '' || this.selection.year == '')) {
-                        swalAlert({
+
+                    if ([1, 3].includes(Number(this.passType)) &&
+                        (this.selection.type === '' || this.selection.year === '')) {
+                        await swalAlert({
                             icon: 'error',
                             title: 'Pass type required',
-                            showCancelButton: true,
-                            cancelButtonText: 'Close', 
                             message: 'Please select a pass type before proceeding.',
                         });
 
                         return;
                     }
 
-                    
-                    if(via.length <= 0) {
-                        swalAlert({
+                    if (via.length <= 0) {
+                        const result = await swalAlert({
                             icon: 'info',
                             title: 'Proceed without via route?',
                             confirmButtonText: 'Okay',
                             message: 'No via route has been selected. Do you want to continue?',
-                            callback: function (result) {
-                                if(result.isConfirmed === true) {
-                                   $('form').trigger('submit');
-                                }
-                            }  
                         });
-                    } else {
-                        $('form').trigger('submit');
+
+                        if (!result.isConfirmed) return;  // stop flow if canceled
+                    }
+
+                    if (this.passType === '2') {
+                        const result = await swalAlert({
+                            icon: 'info',
+                            title: 'Are you sure?',
+                            confirmButtonText: 'Yes, continue',
+                            message: 'On-Duty Pass will be issued through HRMS only. Are you sure you want to generate a manual pass?',
+                        });
+
+                        if (!result.isConfirmed) return; // stop if canceled
                     }
                 }
+
+                $('form').trigger('submit');
             },
+
             getRoutes() {
                 let from_station = this.from_station.toUpperCase();
                 let to_station   = this.to_station.toUpperCase();
@@ -790,6 +766,9 @@
                 if(from_station == '' || to_station == '' || from_station == to_station) {
                     return;
                 }
+
+                document.querySelectorAll('input[name="via[]"]').forEach((input, idx) => input.value = null);
+                document.querySelectorAll('input[name="return_via[]"]').forEach((input, idx) => input.value = null);
 
                 fetch("{{ site_url('api/routes') }}", {
                     method: 'POST',
@@ -817,6 +796,7 @@
             },
             from_station: '{{ old_input('from_station_code') }}',
             to_station: '{{ old_input('to_station_code') }}',
+            is_serving: null,
             next_pass_number: null,
             selectedRouteIndex: null,
             passType: null,
@@ -902,6 +882,7 @@
                     this.second_pass = data.second_pass || [];
                     this.family = data.family || [];
                     this.next_pass_number = data.next_pass_number || null;
+                    this.is_serving = data.is_serving || null;
                 })
                 .catch(err => {
                     console.error(err);
@@ -941,7 +922,7 @@
                     }
                 }
 
-                const reversed = vias.reverse();
+                const reversed = Array.from(vias).reverse();
 
                 // Fill VIA inputs (max 9 as per your form)
                 const viaInputs = document.querySelectorAll('input[name="via[]"]');
@@ -954,7 +935,6 @@
                     returnViaInputs.forEach((input, idx) => input.value = reversed[idx] || '');
                 }
             },
-
 
             clear() {
                 this.selectedRouteIndex = null,

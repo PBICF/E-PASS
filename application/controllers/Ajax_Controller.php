@@ -54,6 +54,7 @@ class Ajax_Controller extends CI_Controller {
         $ptos = $this->account->findPtoByEmp($empno);
         $second_pass = $this->account->findSecondPassByEmp($empno);
         $family = $this->employee->family->find($empno);
+        $is_serving  = $this->employee->is_serving($empno);
         
         return $this->output
                 ->set_status_header(200)
@@ -65,6 +66,7 @@ class Ajax_Controller extends CI_Controller {
                     'second_pass' => array_change_key_case_recursive($second_pass),
                     'family' => array_change_key_case_recursive($family),
                     'next_pass_number' => next_pass_number($empno),
+                    'is_serving' => $is_serving,
                     'code'  => 200
                 ]));
     }

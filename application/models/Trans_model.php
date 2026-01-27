@@ -2,6 +2,8 @@
 
 /**
  * @property Employee_model $employee
+ * @property Account_model $account
+ * @property Pass_type_model $pass_type
  */
 class Trans_model extends CI_Model {
 
