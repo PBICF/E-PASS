@@ -18,12 +18,10 @@ final class First_class_pass extends tFPDF {
      * Show or Hide Preview Image
      * @var bool
      */
-    private $show_preview_image = false;
+    const SHOW_PREVIEW_IMAGE = false;
 
-    public function __construct($orientation='L', $unit='mm', $size=array(295, 148), $preview_image = false) {
+    public function __construct($orientation='L', $unit='mm', $size=array(295, 148)) {
         parent::__construct($orientation, $unit, $size);
-
-        $this->show_preview_image = $preview_image;
         
         $this->AddFont(self::HINDI_FONT, '', self::HINDI_FONT . '.ttf', true);
         $this->SetMargins(10, 10, 10);
@@ -38,32 +36,21 @@ final class First_class_pass extends tFPDF {
     }
 
     public function employee_number($employee_number) {
-        # For Left Side
         $this->add_text($employee_number, 61, 26, self::FONT_SIZE_SMALL);
-        # For Right Side
-        $this->add_text($employee_number, 156, 14, self::FONT_SIZE_SMALL);
+        $this->add_text($employee_number, 245, 40, self::FONT_SIZE_SMALL);
 
         return $this;
     }
 
     public function deportment($english_text, $hindi_text) {
-        # For Left Side
-        $this->add_text('/ ' . $english_text, 60, 50, self::FONT_SIZE_SMALL);
-        $this->add_text($hindi_text, 52, 50, self::FONT_SIZE_SMALL, self::HINDI_FONT);
-
-        # For Right Side
-        $this->add_text('/ ' . $english_text, 126, 42, self::FONT_SIZE_SMALL);
-        $this->add_text($hindi_text, 118, 42, self::FONT_SIZE_SMALL, self::HINDI_FONT);
+        $this->mixed_text($hindi_text, $english_text, 51, 48, self::FONT_SIZE_SMALL);
+        $this->mixed_text($hindi_text, $english_text, 120, 40, self::FONT_SIZE_SMALL);
         return $this;
     }
 
     public function journey_type($english_text, $hindi_text) {
-        # For Left Side
-        $this->add_text($hindi_text, 35, 39, self::FONT_SIZE_LARGE, self::HINDI_FONT);
-        $this->add_text('/ ' . $english_text, 60, 39, self::FONT_SIZE_LARGE);
-        # For Right Side
-        $this->add_text($hindi_text, 126, 23, self::FONT_SIZE_LARGE, self::HINDI_FONT);
-        $this->add_text('/ ' . $english_text, 142, 23, self::FONT_SIZE_LARGE);
+        $this->mixed_text($hindi_text, $english_text, 35, 37, self::FONT_SIZE_LARGE);
+        $this->mixed_text($hindi_text, $english_text, 126, 21, self::FONT_SIZE_LARGE);
 
         return $this;
     }
@@ -74,92 +61,75 @@ final class First_class_pass extends tFPDF {
     }
 
     public function station($english_text, $hindi_text) {
-        $this->add_text($hindi_text, 148, 42, self::FONT_SIZE_SMALL, self::HINDI_FONT);
-        $this->add_text('/ ' . $english_text, 158, 42, self::FONT_SIZE_SMALL);
+        $this->mixed_text($hindi_text, $english_text, 148, 40, self::FONT_SIZE_SMALL);
         return $this;
     }
 
     public function date($date) {
-        $this->add_text($date, 83, 50, self::FONT_SIZE_SMALL);
-        $this->add_text($date, 182, 42, self::FONT_SIZE_SMALL);
+        $this->add_text($date, 83, 48, self::FONT_SIZE_SMALL);
+        $this->add_text($date, 182, 40, self::FONT_SIZE_SMALL);
         return $this;
     }
 
     public function pessenger($line_1, $line_2 = '') {
         $pessenger = preg_replace('/\s+/', ' ', $line_1 ?? '') . ' ' . preg_replace('/\s+/', ' ',  $line_2 ?? '');
-        $this->add_text($pessenger, 50, 54, self::FONT_SIZE_SMALL, self::FONT, 60);
-        $this->add_text($pessenger, 120, 46, self::FONT_SIZE_SMALL, self::FONT, 80);
+        $this->add_text($pessenger, 50, 52, self::FONT_SIZE_SMALL, self::FONT, 60, 3.5);
+        $this->add_text($pessenger, 120, 44, self::FONT_SIZE_SMALL, self::FONT, 80);
         return $this;
     }
 
     public function desigination($designation) {
-        # For Left Side
-        $this->add_text($designation, 65, 61, self::FONT_SIZE_SMALL);
-        # For Right Side
-        $this->add_text($designation, 164, 54, self::FONT_SIZE_SMALL);
+        $this->add_text($designation, 66, 59, self::FONT_SIZE_SMALL);
+        $this->add_text($designation, 164, 52, self::FONT_SIZE_SMALL);
         return $this;
     }
 
     public function from($english_text, $hindi_text) {
-        # For Left Side
-        $this->add_text($hindi_text, 50, 65, self::FONT_SIZE_SMALL, self::HINDI_FONT);
-        $this->add_text('/ ' . $english_text, 60, 65, self::FONT_SIZE_SMALL);
-        #For Right Side
-        $this->add_text($hindi_text, 116, 59, self::FONT_SIZE_SMALL, self::HINDI_FONT);
-        $this->add_text('/ ' . $english_text, 126, 59, self::FONT_SIZE_SMALL);
+        $this->mixed_text($hindi_text, $english_text, 50, 62, self::FONT_SIZE_SMALL);
+        $this->mixed_text($hindi_text, $english_text, 116, 55.5, self::FONT_SIZE_SMALL);
         return $this;
     }
 
     public function destination($english_text, $hindi_text) {
-        # For Left Side
-        $this->add_text($hindi_text, 48, 69, self::FONT_SIZE_SMALL, self::HINDI_FONT);
-        $this->add_text('/ ' . $english_text, 58, 69, self::FONT_SIZE_SMALL);
-        # For Right Side
-        $this->add_text($hindi_text, 156, 59, self::FONT_SIZE_SMALL, self::HINDI_FONT);
-        $this->add_text('/ ' . $english_text, 176, 59, self::FONT_SIZE_SMALL);
+        $this->mixed_text($hindi_text, $english_text, 48, 66, self::FONT_SIZE_SMALL);
+        $this->mixed_text($hindi_text, $english_text, 156, 55.5, self::FONT_SIZE_SMALL);
         return $this;
     }
 
     public function via($via_routes) {
-        # For Left Side
-        $this->add_text($via_routes, 46, 73, self::FONT_SIZE_SMALL);
-        # For Right Side
-        $this->add_text($via_routes, 113, 63, self::FONT_SIZE_SMALL);
+        $this->add_text($via_routes, 46, 70, self::FONT_SIZE_SMALL);
+        $this->add_text($via_routes, 114, 60, self::FONT_SIZE_SMALL);
         return $this;
     }
 
     public function return_from($english_text, $hindi_text) {
-        $this->add_text($hindi_text, 116, 67, self::FONT_SIZE_SMALL, self::HINDI_FONT);
-        $this->add_text('/ '. $english_text, 126, 67, self::FONT_SIZE_SMALL);
+        $this->mixed_text($hindi_text, $english_text, 116, 63, self::FONT_SIZE_SMALL);
         return $this;
     }
 
     public function return_to($english_text, $hindi_text) {
-        $this->add_text($hindi_text, 156, 67, self::FONT_SIZE_SMALL, self::HINDI_FONT);
-        $this->add_text('/ ' . $english_text, 176, 67, self::FONT_SIZE_SMALL);
+        $this->mixed_text($hindi_text, $english_text, 156, 63, self::FONT_SIZE_SMALL);
         return $this;
     }
 
     public function return_via($via_routes) {
-        # For Left Side
-        $this->add_text($via_routes, 46, 80, self::FONT_SIZE_SMALL);
-        # For Right Side
-        $this->add_text($via_routes, 113, 70, self::FONT_SIZE_SMALL);
+        $this->add_text($via_routes, 46, 77, self::FONT_SIZE_SMALL);
+        $this->add_text($via_routes, 113, 68, self::FONT_SIZE_SMALL);
         return $this;
     }
 
     public function over_railway($railway = 'IR') {
-        $this->add_text($railway, 180, 70, self::FONT_SIZE_SMALL);
+        $this->add_text($railway, 180, 68, self::FONT_SIZE_SMALL);
         return $this;
     }
 
     public function outward_journey_dt($outward_journey_dt) {
-        $this->add_text($outward_journey_dt, 180, 74, self::FONT_SIZE_SMALL);
+        $this->add_text($outward_journey_dt, 180, 72, self::FONT_SIZE_SMALL);
         return $this;
     }
     
     public function return_journey_dt($return_journey_dt) {
-        $this->add_text($return_journey_dt, 176, 78, self::FONT_SIZE_SMALL);
+        $this->add_text($return_journey_dt, 176, 75, self::FONT_SIZE_SMALL);
         return $this;
     }
 
@@ -169,24 +139,20 @@ final class First_class_pass extends tFPDF {
     }
 
     public function issue_reson($english_text, $hindi_text = '') {
-        # For Left Side
-        $this->add_text($hindi_text, 70, 118, self::FONT_SIZE_SMALL, self::HINDI_FONT);
-        $this->add_text('/ ' . $english_text, 80, 118, self::FONT_SIZE_SMALL);
-        # For Right Side
-        $this->add_text($hindi_text, 115, 131, self::FONT_SIZE_SMALL, self::HINDI_FONT);
-        $this->add_text('/ ' . $english_text, 125, 131, self::FONT_SIZE_SMALL);
+        $this->mixed_text($hindi_text, $english_text, 60, 112, self::FONT_SIZE_SMALL);
+        $this->mixed_text($hindi_text, $english_text, 115, 126, self::FONT_SIZE_SMALL);
         return $this;
     }
 
     public function authority($authority) {
-        $this->add_text($authority, 62, 134, self::FONT_SIZE_SMALL);
+        $this->add_text($authority, 64, 130, self::FONT_SIZE_SMALL);
         return $this;
     }
 
     public function break_journey_via($bjset1, $bjset2 = '', $bjset3 = '', $bjset4 = '') {
         $break_journey_via = trim(implode(', ', array_filter(array($bjset1, $bjset2, $bjset3, $bjset4))));
-        $this->add_text($break_journey_via, 240, 24, self::FONT_SIZE_SMALL, self::FONT, 50);
-        $this->add_text($break_journey_via, 68, 100, self::FONT_SIZE_SMALL, self::FONT, 50);
+        $this->add_text($break_journey_via, 240, 22, self::FONT_SIZE_SMALL, self::FONT, 50);
+        $this->add_text($break_journey_via, 68, 98, self::FONT_SIZE_SMALL, self::FONT, 50);
         return $this;
     }
 
@@ -206,12 +172,31 @@ final class First_class_pass extends tFPDF {
         $this->MultiCell($w, $h, $text, 0, $align);
     }
 
+    public function mixed_text($hindi, $english, $x, $y, $fontSize = 10)
+    {
+        // 1. Hindi text first
+        $this->SetFont(self::HINDI_FONT, '', $fontSize);
+        $this->SetXY($x, $y);
+        $this->Write(5, $hindi);
+
+        // 2. Calculate Hindi text width
+        $hindi_width = $this->GetStringWidth($hindi);
+
+        // 3. Add small space padding
+        $padding = 0;
+        $english_text = ($hindi_width > 0) ? ' / ' . $english : '  ' . $english;
+
+        // 4. English text next — dynamically placed
+        $this->SetFont(self::FONT, '', $fontSize);
+        $this->SetXY($x + $hindi_width + $padding, $y);
+        $this->Write(5, $english_text);
+    }
+
     public function generate(array $params = array()) {
-        $this->AddPage('L', 'A4', -90);
+        $this->AddPage('P', 'A3', 0);
 		
-        if($this->show_preview_image) {
-            // Show Preview Image
-            $this->Image(base_url('assets/images/first-class.jpeg'), 0, 0, 295, 148);
+        if(self::SHOW_PREVIEW_IMAGE) {
+            $this->Image(base_url('assets/images/first-class.jpeg'), 0, 0, 295, 142);
         }
 
 		$this->employee_number($params['ENO']);	

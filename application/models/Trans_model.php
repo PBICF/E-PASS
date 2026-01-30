@@ -107,7 +107,6 @@ class Trans_model extends CI_Model {
             ->set('REMARKS2', $data['remarks2'])
             ->set('USER_REMARKS', $data['office_use_only'])
             ->set('CELLNO', $employee['CELLNO'])
-            ->set('ORIG_PASSNO', $data['prev_pass_no'])
             ->set('R1', $data['home_foreign']);
 
         foreach(filter_array($data['via']) as $index => $station) {

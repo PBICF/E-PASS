@@ -7,6 +7,7 @@
  * @property Station_model $station
  * @property Classes_model $classes
  * @property Trans_model $trans
+ * @property PRoute_model $route
  */
 class Pass_Controller extends CI_Controller {
 
@@ -18,6 +19,7 @@ class Pass_Controller extends CI_Controller {
         $this->load->model('Station_model', 'station');
         $this->load->model('Classes_model', 'classes');
         $this->load->model('Trans_model', 'trans');
+        $this->load->model('PRoute_model', 'route');
     }
 
     public function index()

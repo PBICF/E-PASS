@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Home :: E Pass')
+@section('title', 'Re-Print Pass')
 
 @section('content')
 <div class="container-md my-4" x-data="{ tab: 'employee' }">
@@ -14,7 +14,7 @@
                         <input type="text" name="passno" class="form-control" placeholder="Pass Number" required>
                     </div>
 
-                    <button class="btn btn-primary w-100">Search</button>
+                    <button class="btn btn-gradient w-100">Search</button>
                 </form>
             </div>
         </div>

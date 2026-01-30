@@ -61,11 +61,10 @@ $route['pass/create']               = 'Pass_Controller/create';
 $route['pass/submit']               = 'Pass_Controller/submit';  
 
 // Pass Print
-$route['print']                     = 'Home_Controller/print';
-$route['print/pass/(:num)']         = 'Home_Controller/print_pass/$1';
+$route['pass/reprint']              = 'Home_Controller/print';
 $route['print/pass']                = 'Home_Controller/print_pass';
-$route['pass/(:num)/pdf']           = 'Home_Controller/render_pass/$1';
 $route['print/pass/(:num)']         = 'Home_Controller/print_pass/$1';
+$route['pass/(:num)/pdf']           = 'Home_Controller/render_pass/$1';
 
 $route['pass/account/update']       = 'Update_Controller/pass_account';
 $route['pass/employee/update']      = 'Update_Controller/employee_update';

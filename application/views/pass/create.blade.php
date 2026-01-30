@@ -7,7 +7,8 @@
     action="{{ site_url('pass/submit') }}" 
     x-data="Employee()" 
     x-init="employee.empno = '{{ old_input('empno', null) }}';inquire();" 
-    x-on:submit.prevent="submit">
+    x-on:submit.prevent="submit" 
+    x-on:keydown.enter.prevent>
     <div class="row" x-show="currentStep === 1">
         <div class="col-md-8 col-sm-12">
             <div class="card emp-card shadow-sm">
@@ -22,7 +23,7 @@
                                 x-mask="999999" 
                                 required
                                 x-model="employee.empno"
-                                x-on:keydown.enter="inquire"
+                                x-on:keydown.enter.prevent="inquire"
                                 x-on:keydown.tab.prevent="inquire" />
                         </div>
                         <div class="col-md-3">
@@ -380,7 +381,6 @@
                                 @foreach ($pass_types as $type)
                                     <option
                                         value="{{ $type['TCODE'] }}"
-                                        @selected(old_input('pass_type') == $type['TCODE'])
                                         :disabled="selection.type == '' && [1,3].includes({{ $type['TCODE'] }}) || (is_serving && {{ $type['TCODE'] }} == 3) || (!is_serving && {{ $type['TCODE'] }} == 2) ">
                                         {{ $type['TNAME'] }}
                                     </option>
@@ -451,18 +451,20 @@
                                     @for ( $i = 1; $i < 10; $i++ )
                                         <input 
                                             type="text" 
-                                            name="via[]" 
+                                            name="via[]"
                                             class="form-control form-control-sm text-uppercase" 
                                             autocomplete="off" 
                                             tabindex="{{ 2 + $i }}"
-                                            value="{{ old_input('via')[($i-1)] ?? '' }}">                                    
+                                            value="{{ old_input('via')[($i-1)] }}">
                                     @endfor
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-2" x-show="routes.length > 0" x-data="{ show: true }">
-                            <a href="javascript:void(0)" x-on:click="show = !show" x-text="show ? 'Hide Routes' : 'Show Routes'"></a>
-                            <div class="col-md-12" x-show="show == true">
+                        <div class="row mb-2" x-show="routes.length > 0">
+                            <a href="javascript:void(0)" class="d-flex flex-row-reverse text-danger" x-on:click="showRoutesList = !showRoutesList">
+                                <span x-text="showRoutesList ? 'Hide Routes' : 'Show Routes'"></span>
+                            </a>
+                            <div class="col-md-12" x-show="showRoutesList == true">
                                 <table class="table table-sm table-bordered text-center align-middle">
                                     <thead class="table-light">
                                         <tr>
@@ -481,7 +483,7 @@
                                                     <input type="radio"
                                                         class="form-check-input"
                                                         :checked="selectedRouteIndex === rIndex"
-                                                        x-on:change="selectRoute(route, rIndex); show = false">
+                                                        x-on:change="selectRoute(route, rIndex); showRoutesList = false;">
                                                 </td>
 
                                                 <!-- VIA STATIONS -->
@@ -614,7 +616,7 @@
         return {
             routes: [],
             currentStep: {{ $current_tab }},
-            validityTo: "{{ old_input('validity_to') ?? date('d/m/Y', strtotime('+4 months')) }}",
+            validityTo: "{{ old_input('validity_to', date('d/m/Y', strtotime('+4 months'))) }}",
             selectedMembers: (function() {
                 try {
                     if (Array.isArray(oldMembers)) return oldMembers.map(String);
@@ -657,30 +659,31 @@
                     }
 
                     if (!this.selection.type || !this.selection.year) {
-                        let result = await swalAlert({
-                            icon: 'info',
-                            title: 'Proceed without PASS/PTO account?',
-                            confirmButtonText: 'Okay',
-                            message: 'You have not selected an account year (PASS or PTO). Do you want to continue?',
+                        return swalAlert({
+                            icon: 'warning',
+                            title: 'PASS Account Selection Needed',
+                            message: 'You have not selected an account year (PASS or PTO). Please select a PASS account first!',
                         });
-
-                        if (!result.isConfirmed) return;
                     } else {
-                        let account = this.selection.type == 'PASS' 
-                            ? this.pass.find(item => item.year === this.selection.year) 
-                            : (this.selection.type == 'PTO' 
-                            ? this.ptos.find(item => item.year === this.selection.year)
-                            : this.second_pass.find(item => item.year === this.selection.year));
+                        let account = null;
+                        if(this.selection.type == 'PASS') {
+                            account = this.pass.find(item => item.year === this.selection.year);
+                        } else if(this.selection.type == 'PTO') {
+                            account = this.ptos.find(item => item.year === this.selection.year);
+                        } else {
+                            account = this.second_pass.find(item => item.year === this.selection.year);
+                        }
 
                         if(account.balance <= 0) {
-                            await swalAlert({
+                            let result = await swalAlert({
                                 icon: 'warning',
-                                title: 'Error!',
+                                title: 'Warning!',
                                 showCancelButton: true,
+                                confirmButtonText: 'Yes, continue',
                                 message: 'The account does not have enough balance for the selected pass type.',
                             });
 
-                            return;
+                            if (!result.isConfirmed) return;
                         }
                     }
                 }
@@ -699,6 +702,14 @@
                 }
 
                 if (this.currentStep === 3) {
+                    if ($('select[name="pass_type"]').val().trim() === '') {
+                        await swalAlert({
+                            icon: 'error',
+                            title: 'Type of pass are required',
+                            message: 'Please chose a valid pass type.',
+                        });
+                        return;
+                    }
                     if ($('input[name="from_station_code"]').val().trim() === '') {
                         await swalAlert({
                             icon: 'error',
@@ -767,8 +778,9 @@
                     return;
                 }
 
-                document.querySelectorAll('input[name="via[]"]').forEach((input, idx) => input.value = null);
+                //document.querySelectorAll('input[name="via[]"]').forEach((input, idx) => input.value = null);
                 document.querySelectorAll('input[name="return_via[]"]').forEach((input, idx) => input.value = null);
+                this.selectedRouteIndex = null;
 
                 fetch("{{ site_url('api/routes') }}", {
                     method: 'POST',
@@ -785,6 +797,10 @@
                 .then(data => {
                     if(data.code == 200) {
                         this.routes = data.routes;
+                        if(data.routes.length > 0) {
+                            this.selectedRouteIndex = null;
+                            this.showRoutesList = true;
+                        }
                     }
                 })
                 .catch(err => {
@@ -799,7 +815,8 @@
             is_serving: null,
             next_pass_number: null,
             selectedRouteIndex: null,
-            passType: null,
+            passType: '{{ old_input('pass_type') }}',
+            showRoutesList: false,
             employee: {
                 empno: null,
                 ename: '',
@@ -883,6 +900,10 @@
                     this.family = data.family || [];
                     this.next_pass_number = data.next_pass_number || null;
                     this.is_serving = data.is_serving || null;
+
+                    if(this.is_serving == null) {
+                        this.passType = "{{ old_input('pass_type', 3) }}";
+                    }
                 })
                 .catch(err => {
                     console.error(err);
@@ -937,6 +958,7 @@
             },
 
             clear() {
+                this.showRoutesList = false;
                 this.selectedRouteIndex = null,
                 this.routes = [],
                 this.from_station = '',

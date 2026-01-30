@@ -59,6 +59,21 @@ $config['pass_validation'] = array(
         'rules' => 'required|in_list[H,F,K,A]',
     ),
     array(
+        'field' => 'via[]',
+        'label' => 'Via',
+        'rules' => 'max_length[5]',
+    ),
+    array(
+        'field' => 'return_via[]',
+        'label' => 'Return Via',
+        'rules' => 'max_length[5]',
+    ),
+    array(
+        'field' => 'break_journey[]',
+        'label' => 'Break Journey (Onward)',
+        'rules' => 'max_length[5]',
+    ),
+    array(
         'field' => 'employee',
         'label' => 'Employee',
         'rules' => 'callback__valid_pass_balance',

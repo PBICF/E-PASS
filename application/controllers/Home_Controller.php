@@ -12,6 +12,7 @@ class Home_Controller extends CI_Controller {
 		parent::__construct();
 		$this->load->library('First_class_pass', NULL, 'FCP');
 		$this->load->library('Second_class_pass', NUll, 'SCP');
+		$this->load->library('Second_AC_class_pass', NUll, 'SACP');
 
 		$this->load->model('Employee_model', 'employee');
 		$this->load->model('Family_model', 'family');
@@ -37,8 +38,8 @@ class Home_Controller extends CI_Controller {
 	        return custom_404();
 	    }
 
-		// Show small iframe which will load the actual PDF rendering endpoint
-		return view('pass.pdf_iframe', compact('passno'));
+		//return view('pass.pdf_iframe', compact('passno'));
+		return redirect("pass/$passno/pdf");
 	}
 
 	public function render_pass($passno)
@@ -53,9 +54,10 @@ class Home_Controller extends CI_Controller {
 	        return custom_404();
 	    }
 
-		// Generate and stream PDF inline to the browser (SCP::generate uses Output('I'))
 		if($pass_details['PCLASS'] == 'First') {
 			return $this->FCP->generate($pass_details);
+		} else if($pass_details['PCLASS'] == 'Second-A') {
+			return $this->SACP->generate($pass_details);
 		} else {
 			return $this->SCP->generate($pass_details);
 		}
