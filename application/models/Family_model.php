@@ -75,7 +75,7 @@ class Family_model extends CI_Model {
         return $this->db
             ->from($this->table)
             ->where('EMPNO', $empno)
-            ->where_in('FRELATION', $frelation)
+            ->where_in('FSLNO', $frelation)
             ->get()
             ->result_array();
     }

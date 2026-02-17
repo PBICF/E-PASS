@@ -219,13 +219,15 @@ final class First_class_pass extends tFPDF {
 		$this->return_via($params['RVIASTNS']);
 
 		$this->over_railway($params['RLYSET']);
-		$this->outward_journey_dt('---');
+		$this->outward_journey_dt('--');
 		$this->return_journey_dt($params['PVALIDTO']);
 
 		$this->issue_reson($params['TNAME'], $params['TNAMESTR_HINDI']);
 		$this->authority($params['SIGNSTR']);
 
 		$this->break_journey_via($params['BJSET1'], $params['BJSET2'], $params['BJSET3'], $params['BJSET4']);
+
+        $this->add_text($params['COMPANION_STR'], 210, 60, self::FONT_SIZE_MEDIUM, self::FONT, 85);
 		
 		$this->string($params['STR10'], 220, 92, 'B');
 		$this->string($params['HEADER3'], 220, 96, 'BU');

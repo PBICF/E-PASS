@@ -52,12 +52,13 @@ class Trans_model extends CI_Model {
     }
 
 
-    public function create_pass(array $data)
+    public function create_pass()
     {
+        $data = $this->input->post();
         $today = date('d/m/Y');
         $employee = $this->employee->find($data['empno']);
-        $validity_from = format_date($today);
-        $validity_to = format_date($data['validity_to']);
+        $validity_from = $data['validity_from'] ?? $today;
+        $validity_to = $data['validity_to'];
         $after_balance = $data['AFTER_BALANCE'] ?? 0;
         $different_return_via = isset($data['different_return_via']) ? 'Y' : 'N';
         $is_companion = isset($data['COMPANIONIND']) ? 'Y' : 'N';
@@ -66,7 +67,7 @@ class Trans_model extends CI_Model {
         $rviastns = $different_return_via === 'Y' ? strtoupper(implode(',', filter_array($data['return_via']))) : strtoupper(implode(',', filter_array($data['via'])));
         $travellers = $this->employee->family->findMembers($data['empno'], $data['members']);
         
-        list($depend1, $depend2) = build_relation_string($travellers);
+        list($depend1, $depend2) = build_relation_string($travellers, $employee);
         $break_journey = array_chunk($data['break_journey'], 5);
         list($bjset1, $bjset2, $bjset3, $bjset4) = array_pad($break_journey, 4, []);
 

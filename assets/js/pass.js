@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Gather non-empty break values, uppercase
         const vals = breakInputs.map(i => i.value.trim().toUpperCase()).filter(v => v.length > 0);
-        const rev = vals.slice().reverse();
+        const rev = [...vals].reverse();
 
         // Write reversed values into return inputs, clear the rest
         returnInputs.forEach((input, idx) => {

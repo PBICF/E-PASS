@@ -555,7 +555,7 @@
                             <div class="col-md-6 col-sm-12">
                                 <label class="form-label">Break Journey (Onward) &nbsp;<span class="bj_code_details text-muted"></span></label>
                                 <div class="d-flex gap-2 justify-content-between">
-                                    @for( $i = 1; $i < 10; $i++ )
+                                    @for( $i = 1; $i < 15; $i++ )
                                         <input type="text" name="break_journey[]" class="form-control form-control-sm text-uppercase" autocomplete="off" value="{{ old_input('break_journey')[($i-1)] ?? '' }}">
                                     @endfor
                                 </div>

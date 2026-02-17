@@ -76,7 +76,7 @@ class Pass_Controller extends CI_Controller {
 
         // If tab 3 passes then submit
         if ($current_tab === 3) {
-            $this->trans->create_pass($this->input->post());
+            $this->trans->create_pass();
 
             $pass_no = $this->input->post('pass_no');
             return redirect_with('pass/' . $pass_no . '/pdf');
