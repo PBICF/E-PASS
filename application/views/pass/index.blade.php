@@ -54,5 +54,15 @@
             </div>
         </a>
     </div>
+    <div class="col-md-3 mt-3">
+        <a href="{{ site_url('pass/cancel') }}" class="text-white text-decoration-none">
+            <div class="card orange-section">
+                <div class="card-body">
+                    <h5 class="text-center">Cancel Pass</h5>
+                    <p class="mt-3 text-center">Cancel an issued pass using pass number and reason.</p>
+                </div>
+            </div>
+        </a>
+    </div>
 </div>
 @endsection

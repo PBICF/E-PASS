@@ -136,6 +136,28 @@ class Account_model extends CI_Model {
             ->update($this->table);
     }
 
+    public function refund(int $empno, int $year, string $type, int $amount)
+    {
+        switch($type)
+        {
+            case 'PTO':
+                $this->db->set('PTO_AVAILED', 'PTO_AVAILED - '.$amount, FALSE);
+                break;
+            case 'PASS':
+                $this->db->set('PASS_AVAILED', 'PASS_AVAILED - '.$amount, FALSE);
+                break;
+            case '2AC':
+                $this->db->set('PASS_AVAILED', 'PASS_AVAILED - '.$amount, FALSE);
+                $this->db->set('SECONDA_AVAILED', 'SECONDA_AVAILED - '.$amount, FALSE);
+                break;
+        }
+
+        return $this->db
+            ->where('EMPNO', $empno)
+            ->where('ACYEAR', $year)
+            ->update($this->table);
+    }
+
     /**
      * Return the available balance for the provided type ('PASS' or 'PTO')
      */

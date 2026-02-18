@@ -4,6 +4,7 @@
  * @property Employee_model $employee
  * @property Account_model $account
  * @property PRoute_model $route
+ * @property Trans_model $trans
  */
 class Ajax_Controller extends CI_Controller {
 
@@ -14,6 +15,7 @@ class Ajax_Controller extends CI_Controller {
         $this->load->model('Employee_model', 'employee');
         $this->load->model('Account_model', 'account');
         $this->load->model('PRoute_model', 'route');
+        $this->load->model('Trans_model', 'trans');
 
         if(! $this->input->is_ajax_request()) {
             return $this->output
@@ -128,6 +130,53 @@ class Ajax_Controller extends CI_Controller {
                     'code'  => 200,
                     'success' => 'Recoard has been successfully updated.',
                 ]));
+    }
+
+    public function get_pass(int $pass_number)
+    {
+        if ($this->input->method() === 'post') {
+			return $this->output
+                ->set_status_header(400)
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'error' => 'Invalid Request Method',
+                    'code'  => 400,
+                ]));
+		}
+
+        $pass = $this->trans->get_pass($pass_number);
+        return $this->output
+                ->set_status_header(200)
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'code'  => 200,
+                    'pass' => $pass,
+                ]));
+        
+    }
+    
+    public function get_pass_details()
+    {
+        if ($this->input->method() !== 'post') {
+			return $this->output
+                ->set_status_header(400)
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'error' => 'Invalid Request Method',
+                    'code'  => 400,
+                ]));
+		}
+
+        $pass_number = $this->input->post('pass_number', true);
+        $pass = $this->trans->get_pass($pass_number);
+        return $this->output
+                ->set_status_header(200)
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'code'  => 200,
+                    'pass' => $pass,
+                ]));
+        
     }
 
     public function routes()

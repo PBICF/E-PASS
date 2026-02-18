@@ -29,4 +29,12 @@ class Print_pass_model extends CI_Model {
             ->get($this->table)
             ->row_array();
     }
+
+    public function get_passes_by_empno(int $empno) {
+        return $this->db->select('PASSNO, ENO, TTYPE, FRSTN, TOSTN, PVALIDFR, PVALIDTO, PCLASS, TCANCEL, DEPEND1, DEPEND2')
+            ->where('ENO', $empno)
+            ->order_by('PASSNO', 'ASC')
+            ->get($this->table)
+            ->result_array();
+    }
 }

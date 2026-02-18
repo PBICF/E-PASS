@@ -5,7 +5,6 @@
  * @property Account_model $account
  * @property Pass_type_model $pass_type
  * @property Station_model $station
- * @property Classes_model $classes
  * @property Trans_model $trans
  */
 class Update_Controller extends CI_Controller {
@@ -16,7 +15,6 @@ class Update_Controller extends CI_Controller {
         $this->load->model('Employee_model', 'employee');
         $this->load->model('Pass_type_model', 'pass_type');
         $this->load->model('Station_model', 'station');
-        $this->load->model('Classes_model', 'classes');
         $this->load->model('Trans_model', 'trans');
         $this->load->model('Account_model', 'account');
     }
@@ -65,12 +63,10 @@ class Update_Controller extends CI_Controller {
         }
 
         $estatus = $this->employee->status->all();
-        $classes = $this->classes->all();
         $pass_types = $this->pass_type->all();
 
         return view('update.employee', compact(
             'estatus',
-            'classes',
             'pass_types',
         ));
     }

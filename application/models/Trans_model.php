@@ -32,6 +32,57 @@ class Trans_model extends CI_Model {
         return $this->db->get_where($this->table, ['EMPNO' => $empno])->result_array();
     }
 
+    public function cancel_pass($passno, $reason = '')
+    {
+        $pass = $this->find($passno);
+        if (!$pass) {
+            throw new Exception('Invalid Pass Number');
+        }
+
+        if (trim($reason) === '') {
+            throw new Exception('Reason is required');
+        }
+
+        try {
+            // Start Transaction
+            $this->db->trans_begin();
+
+            $should_debit = $this->pass_type->should_debit_account($pass['TTYPE']);
+
+            if ($should_debit) {
+                $refund = $this->account->refund(
+                    $pass['ENO'],
+                    $pass['ACYEAR'],
+                    ($pass['SECONDA_IND'] == 1) ? '2AC' : 'PASS',
+                    $pass['RETURNIND']
+                );
+
+                // If refund fails, rollback
+                if (!$refund) {
+                    $this->db->trans_rollback();
+                    throw new Exception('Unable to cancel the pass. Please try again.');
+                }
+            }
+
+            $updated = $this->db->set('TCANCEL', 1)
+                ->set('USER_REMARKS', $reason)
+                ->where('PASSNO', $passno)
+                ->update($this->table);
+
+            // Check transaction status
+            if (!$updated || $this->db->trans_status() === FALSE) {
+                $this->db->trans_rollback();
+                throw new Exception('Unable to cancel the pass. Please try again.');
+            } else {
+                $this->db->trans_commit();
+                return true;
+            }
+        } catch (\Exception $e) {
+            throw 'Unable to cancel the pass. ' . $e->getMessage();
+        }
+    }
+
+
     public function next_pass_number($employee_no)
     {
         // First day of current month
@@ -51,6 +102,17 @@ class Trans_model extends CI_Model {
             : 1;
     }
 
+    public function get_pass(int $passno)
+    {
+        $this->db
+            ->select('TRANS.*, EMP.*', true)
+            ->from($this->table)
+            ->join('EMP', 'EMP.EMPNO = TRANS.ENO')
+            ->where('TCANCEL', null)
+            ->where('PASSNO', $passno);
+
+        return $this->db->get()->row();
+    }
 
     public function create_pass()
     {
@@ -100,7 +162,7 @@ class Trans_model extends CI_Model {
             ->set('COMPANIONIND', $is_companion)
             ->set('ACYEAR', $data['account_year'])
             ->set('DIFF_RVIA_IND', $different_return_via)
-            ->set('AFTER_BALANCE', $after_balance)
+            ->set('AFTER_BALANCE', (int) $after_balance)
             ->set('FRSTN_HINDI', $data['from_station_name_hindi'])
             ->set('TOSTN_HINDI', $data['to_station_name_hindi'])
             ->set('USER_NAME', $data['office_use_only'])
@@ -108,6 +170,7 @@ class Trans_model extends CI_Model {
             ->set('REMARKS2', $data['remarks2'])
             ->set('USER_REMARKS', $data['office_use_only'])
             ->set('CELLNO', $employee['CELLNO'])
+            ->set('SECONDA_IND', ($data['account_type'] == '2AC') ? 1 : null)
             ->set('R1', $data['home_foreign']);
 
         foreach(filter_array($data['via']) as $index => $station) {

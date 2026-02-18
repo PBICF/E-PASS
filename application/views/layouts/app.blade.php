@@ -14,14 +14,6 @@
     <link rel="stylesheet" type="text/css" href="{{ @asset('assets/css/jquery-ui.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ @asset('assets/css/sweetalert.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ @asset('assets/css/styles.css') }}" />
-    @yield('styles')
-    <script defer src="{{ @asset('assets/js/mask.min.js') }}" type="text/javascript"></script>
-    <script defer src="{{ @asset('assets/js/alpinejs.min.js') }}" type="text/javascript"></script>
-    <script src="{{ @asset('assets/js/jquery-3.3.1.min.js') }}" type="text/javascript"></script>
-    <script src="{{ @asset('assets/js/jquery-ui.js') }}" type="text/javascript"></script>
-    <script src="{{ @asset('assets/js/sweetalert.min.js') }}" type="text/javascript"></script>
-    <script src="{{ @asset('assets/js/app.js') }}?version={{ time() }}" type="text/javascript"></script>
-    @yield('scripts')
 </head>
 
 <body 
@@ -77,5 +69,15 @@
     <footer class="py-3 my-4 text-muted text-center">
         &copy; {{ date('Y') }} Designed and developed by Personnel Branch, <a href="https://pb.icf.gov.in/">ICF</a>
     </footer>
+    
+    @yield('styles')
+    <script defer src="{{ @asset('assets/js/mask.min.js') }}" type="text/javascript"></script>
+    <script defer src="{{ @asset('assets/js/alpinejs.min.js') }}" type="text/javascript"></script>
+    <script src="{{ @asset('assets/js/bootstrap.bundle.js') }}" type="text/javascript"></script> 
+    <script src="{{ @asset('assets/js/jquery-3.3.1.min.js') }}" type="text/javascript"></script>
+    <script src="{{ @asset('assets/js/jquery-ui.js') }}" type="text/javascript"></script>
+    <script src="{{ @asset('assets/js/sweetalert.min.js') }}" type="text/javascript"></script>
+    <script src="{{ @asset('assets/js/app.js') }}?version={{ time() }}" type="text/javascript"></script>
+    @yield('scripts')
 </body>
 </html>

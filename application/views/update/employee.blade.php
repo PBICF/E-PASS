@@ -102,9 +102,11 @@
                             <div class="col-md-4">
                                 <label class="form-label">Class</label>
                                 <select class="form-select form-select-sm" name="ECLASS" x-model="employee.eclass">
-                                    @foreach ($classes as $c)
-                                        <option value="{{ $c['SCODE'] }}">{{ $c['SNAME'] }}</option>
-                                    @endforeach
+                                    <option value=""><option>
+                                    <option value="1">First Class</option>
+                                    <option value="2">Second Class</option>
+                                    <option value="3">First Class - A</option>
+                                    <option value="4">Second Class - A</option>
                                 </select>
                             </div>
                             <div class="col-md-4">

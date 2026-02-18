@@ -987,16 +987,8 @@
                 }
             },
 
-            fillInputs(name, values = []) {
-                const inputs = document.querySelectorAll(`input[name="${name}"]`);
-                inputs.forEach((input, idx) => {
-                    input.value = values[idx] || '';
-                    input.dispatchEvent(new Event('change'));
-                });
-            },
-
             onOldPassChange() {
-                if(!this.oldPassNo || this.oldPassNo.trim() == '') return;
+                if(this.oldPassNo.trim() == '' || this.oldPassNo == null) return;
                 if(this.state.isLoading == true) return;
                 this.state.isLoading = true;
 
@@ -1014,83 +1006,7 @@
                     return data;
                 })
                 .then(data => {
-                    const pass = data.pass || {};
-                    if (!pass || !pass.PASSNO) {
-                        throw { error: 'Pass not found' };
-                    }
-
-                    this.passType = pass.TTYPE ? String(pass.TTYPE) : '';
-                    this.from_station = (pass.FRSTNCD || '').toUpperCase();
-                    this.to_station = (pass.TOSTNCD || '').toUpperCase();
-
-                    const singleReturnSelect = document.querySelector('select[name="single_return"]');
-                    if (singleReturnSelect) {
-                        singleReturnSelect.value = pass.RETURNIND ? String(pass.RETURNIND) : '2';
-                        singleReturnSelect.dispatchEvent(new Event('change'));
-                    }
-
-                    const homeForeignSelect = document.querySelector('select[name="home_foreign"]');
-                    if (homeForeignSelect) {
-                        homeForeignSelect.value = pass.R1 ? String(pass.R1) : 'H';
-                        homeForeignSelect.dispatchEvent(new Event('change'));
-                    }
-
-                    const companionCheckbox = document.getElementById('companion_required');
-                    if (companionCheckbox) {
-                        companionCheckbox.checked = String(pass.COMPANIONIND || '').toUpperCase() === 'Y';
-                        companionCheckbox.dispatchEvent(new Event('change'));
-                    }
-
-                    const differentReturnCheckbox = document.getElementById('different_return_via');
-                    if (differentReturnCheckbox) {
-                        differentReturnCheckbox.checked = String(pass.DIFF_RVIA_IND || '').toUpperCase() === 'Y';
-                        differentReturnCheckbox.dispatchEvent(new Event('change'));
-                    }
-
-                    const fromInput = document.querySelector('input[name="from_station_code"]');
-                    if (fromInput) {
-                        fromInput.value = this.from_station;
-                        fromInput.dispatchEvent(new Event('change'));
-                    }
-
-                    const toInput = document.querySelector('input[name="to_station_code"]');
-                    if (toInput) {
-                        toInput.value = this.to_station;
-                        toInput.dispatchEvent(new Event('change'));
-                    }
-
-                    const viaValues = Array.from({ length: 9 }, (_, i) => pass[`VIA${i + 1}`] || '');
-                    const returnViaValues = Array.from({ length: 9 }, (_, i) => pass[`RVIA${i + 1}`] || '');
-                    const breakValues = Array.from({ length: 14 }, (_, i) => pass[`B${i + 1}`] || '');
-
-                    if (!viaValues.some(Boolean) && pass.VIASTNS) {
-                        const parsed = String(pass.VIASTNS).split(',').map(v => v.trim()).filter(Boolean);
-                        parsed.forEach((v, i) => { if (i < viaValues.length) viaValues[i] = v; });
-                    }
-
-                    if (!returnViaValues.some(Boolean) && pass.RVIASTNS) {
-                        const parsed = String(pass.RVIASTNS).split(',').map(v => v.trim()).filter(Boolean);
-                        parsed.forEach((v, i) => { if (i < returnViaValues.length) returnViaValues[i] = v; });
-                    }
-
-                    if (!breakValues.some(Boolean)) {
-                        const bj = [pass.BJSET1, pass.BJSET2, pass.BJSET3, pass.BJSET4]
-                            .filter(Boolean)
-                            .join(',');
-                        if (bj) {
-                            const parsed = bj.split(',').map(v => v.trim()).filter(Boolean);
-                            parsed.forEach((v, i) => { if (i < breakValues.length) breakValues[i] = v; });
-                        }
-                    }
-
-                    this.fillInputs('via[]', viaValues);
-                    this.fillInputs('break_journey[]', breakValues);
-
-                    if (String(pass.DIFF_RVIA_IND || '').toUpperCase() === 'Y') {
-                        this.fillInputs('return_via[]', returnViaValues);
-                    } else {
-                        document.querySelectorAll('input[name="return_via[]"]').forEach((input) => input.dispatchEvent(new Event('change')));
-                    }
+                    
                 })
                 .catch(err => {
                     console.error(err);

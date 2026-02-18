@@ -55,6 +55,8 @@ $route['api/employees/inquire']     = 'Ajax_Controller/inquire';
 $route['api/employee/family']       = 'Ajax_Controller/get_family';
 $route['api/family/update']         = 'Ajax_Controller/update_family';
 $route['api/routes']                = 'Ajax_Controller/routes';
+$route['api/pass/(:num)']           = 'Ajax_Controller/get_pass/$1';
+$route['api/pass/details']          = 'Ajax_Controller/get_pass_details';
 
 // Pass creation
 $route['pass/create']               = 'Pass_Controller/create';
@@ -62,6 +64,8 @@ $route['pass/submit']               = 'Pass_Controller/submit';
 
 // Pass Print
 $route['pass/reprint']              = 'Home_Controller/print';
+$route['pass/cancel']               = 'Home_Controller/cancel';
+$route['pass/cancel/submit']        = 'Home_Controller/cancel_pass';
 $route['print/pass']                = 'Home_Controller/print_pass';
 $route['print/pass/(:num)']         = 'Home_Controller/print_pass/$1';
 $route['pass/(:num)/pdf']           = 'Home_Controller/render_pass/$1';
