@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('title', 'ISSUE NEW PASS')
-
 @section('content')
 <form method="POST" 
     action="{{ site_url('pass/submit') }}" 
@@ -88,7 +87,7 @@
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Class</label>
-                            <select class="form-select" x-model="employee.eclass" readonly disabled>
+                            <select class="form-select" x-model="employee.eclass" readonly disabled name="input_eclass">
                                 <option value=""><option>
                                 <option value="1">First Class</option>
                                 <option value="2">Second Class</option>
@@ -347,9 +346,9 @@
             </div>
         </div>
     </div>
-    <div class="row" x-show="currentStep === 3">
+    <div class="row pass-type" x-show="currentStep === 3" :class="employee.eclass ? `pass-type-${employee.eclass}` : ''">
         <div class="col-md-12">
-            <div class="card emp-card shadow-sm p-0">
+            <div class="card emp-card shadow-sm p-0 bg-transparent">
                 <div class="card-body p-3">
                     <div class="row mb-2 justify-content-between">
                         <div class="col-md-4">
@@ -359,8 +358,8 @@
                             </div> 
                         </div>
                         <div class="col-md-3">
-                            <div class="d-flex justify-content-between">
-                                <div class="form-groop rounded-2 bg-gradient p-2 flex-1 w5-0">
+                            <div class="d-flex justify-content-between rounded-2 bg-gradient gap-2 p-2">
+                                <div class="form-groop">
                                     <label class="form-label text-white fw-bold">Pass No.</label>
                                     <input type="text" 
                                         @class(["form-control form-control-sm", "is-invalid" => have_error('pass_no')]) 
@@ -373,7 +372,7 @@
                                         inputmode="numeric" 
                                         autocomplete="off">
                                 </div>
-                                <div class="form-groop rounded-2 bg-gradient p-2 flex-1 w-50">
+                                <div class="form-groop">
                                     <label class="form-label text-white fw-bold">Old Pass No.</label>
                                     <input type="text" 
                                         class="form-control form-control-sm"
@@ -391,20 +390,28 @@
                     <div class="row mb-2">
                         <div class="col-md-3">
                             <label class="form-label">Type of Pass</label>
-                            <select class="form-select form-select-sm" 
-                                    name="pass_type" 
-                                    x-model="passType"
-                                    x-on:change="updateValidity">
-                                <option value="">-- SELECT PASS TYPE --</option>                                
-                                @foreach ($pass_types as $type)
+                            <select 
+                                class="form-select form-select-sm" 
+                                name="pass_type" 
+                                x-model="passType"
+                                x-on:change="updateValidity">
+
+                            <option value="">-- SELECT PASS TYPE --</option>                                
+
+                            @foreach ($pass_types as $type)
+                                @if($type['TCODE'] != 2)
                                     <option
                                         value="{{ $type['TCODE'] }}"
-                                        :disabled="selection.type == '' && [1,3].includes({{ $type['TCODE'] }}) || (is_serving && {{ $type['TCODE'] }} == 3) || (!is_serving && {{ $type['TCODE'] }} == 2) ">
+                                        :disabled="
+                                            (selection.type == '' && [1,3].includes({{ $type['TCODE'] }})) ||
+                                            (is_serving && {{ $type['TCODE'] }} == 3)
+                                        ">
                                         {{ $type['TNAME'] }}
                                     </option>
-                                @endforeach
+                                @endif
+                            @endforeach
 
-                            </select>
+                        </select>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Single / Return?</label>
@@ -570,19 +577,20 @@
                         </div>
 
                         <div class="row mb-2">
-                            <div class="col-md-6 col-sm-12">
+                            <div class="col-md-12 col-sm-12">
                                 <label class="form-label">Break Journey (Onward) &nbsp;<span class="bj_code_details text-muted"></span></label>
-                                <div class="d-flex gap-2 justify-content-between">
+                                <div class="d-flex gap-1 justify-content-between">
                                     @for( $i = 1; $i < 15; $i++ )
                                         <input type="text" name="break_journey[]" class="form-control form-control-sm text-uppercase" autocomplete="off" value="{{ old_input('break_journey')[($i-1)] ?? '' }}">
                                     @endfor
                                 </div>
                             </div>
-
-                            <div class="col-md-6 col-sm-12">
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-12 col-sm-12">
                                 <label class="form-label">Break Journey (Return) &nbsp;<span class="bjr_code_details text-muted"></span></label>
-                                <div class="d-flex gap-2 justify-content-between">
-                                    @for( $i = 1; $i < 10; $i++ )
+                                <div class="d-flex gap-1 justify-content-between">
+                                    @for( $i = 1; $i < 15; $i++ )
                                         <input type="text" name="break_journey_return[]" class="form-control form-control-sm text-uppercase" autocomplete="off" value="{{ old_input('break_journey_return')[($i-1)] ?? '' }}" readonly>
                                     @endfor
                                 </div>
@@ -627,6 +635,28 @@
 
 @section('scripts')
 <script src="{{ @asset('assets/js/pass.js') }}" type="text/javascript"></script>
+<?php 
+if((int) date('Y') == (int) old_input('account_year') ) {
+    $validity_to = date('d/m/Y', strtotime('+4 months -1 day'));
+} else {    
+    $today = new DateTime();
+    // +4 months - 1 day
+    $maxByMonths = (clone $today)
+        ->add(new DateInterval('P4M'))
+        ->sub(new DateInterval('P1D'));
+
+
+    // April 30 of current year
+    $year = date('Y');
+    $april30 = new DateTime("$year-04-30");
+
+    // Pick the earlier date
+    $finalMaxDate = ($maxByMonths < $april30) ? $maxByMonths : $april30;
+
+    $validity_to = old_input('validity_to', $finalMaxDate->format('d/m/Y'));
+}
+?>
+
 <script type="text/javascript">
     const STATION = @json($stations);
     function Employee() {
@@ -634,7 +664,7 @@
         return {
             routes: [],
             currentStep: {{ $current_tab }},
-            validityTo: "{{ old_input('validity_to', date('d/m/Y', strtotime('+4 months'))) }}",
+            validityTo: "{{ $validity_to }}",
             selectedMembers: (function() {
                 try {
                     if (Array.isArray(oldMembers)) return oldMembers.map(String);

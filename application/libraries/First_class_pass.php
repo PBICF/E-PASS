@@ -85,14 +85,14 @@ final class First_class_pass extends tFPDF {
     }
 
     public function from($english_text, $hindi_text) {
-        $this->mixed_text($hindi_text, $english_text, 50, 62, self::FONT_SIZE_SMALL);
-        $this->mixed_text($hindi_text, $english_text, 116, 55.5, self::FONT_SIZE_SMALL);
+        $this->mixed_text('', $english_text, 50, 62, self::FONT_SIZE_SMALL);
+        $this->mixed_text('', $english_text, 116, 55.5, self::FONT_SIZE_SMALL);
         return $this;
     }
 
     public function destination($english_text, $hindi_text) {
-        $this->mixed_text($hindi_text, $english_text, 48, 66, self::FONT_SIZE_SMALL);
-        $this->mixed_text($hindi_text, $english_text, 156, 55.5, self::FONT_SIZE_SMALL);
+        $this->mixed_text('', $english_text, 48, 66, self::FONT_SIZE_SMALL);
+        $this->mixed_text('', $english_text, 156, 55.5, self::FONT_SIZE_SMALL);
         return $this;
     }
 

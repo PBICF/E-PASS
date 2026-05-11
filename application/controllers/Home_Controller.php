@@ -6,7 +6,7 @@
  * @property Pass_type_model pass_type
  * @property Trans_model trans
  */
-class Home_Controller extends CI_Controller {
+class Home_Controller extends MY_Controller {
 
 	public function __construct()
 	{
@@ -104,12 +104,13 @@ class Home_Controller extends CI_Controller {
 
 	public function render_pass($passno)
 	{
-		$passno = $passno ? $passno : $this->input->post('passno');
+	    $passno = $passno ? $passno : $this->input->post('passno');
 	    if (! $passno || ! is_numeric($passno)) {
 			return custom_404();
 		}
 
 	    $pass_details = $this->print->get_pass($passno);
+
 	    if (! $pass_details) {
 	        return custom_404();
 	    }

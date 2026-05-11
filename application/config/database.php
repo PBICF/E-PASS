@@ -72,7 +72,7 @@ $query_builder = TRUE;
 
 $db['default'] = array(
     'dsn'      => '',
-    'hostname' => 'hrms',			// Oracle host or TNS name
+    'hostname' => '10.0.240.77:1521/pbicf', // Oracle host or TNS name
     'username' => 'pass',			// Oracle username
     'password' => 'alrs',			// Oracle password
     'database' => '',				// SERVICE_NAME or SID
@@ -91,3 +91,5 @@ $db['default'] = array(
     'failover' => array(),
     'save_queries' => TRUE
 );
+
+//$db['default']['dsn'] = '(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=10.0.240.77)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=your_service_name)))';

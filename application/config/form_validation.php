@@ -202,7 +202,7 @@ $config['employee_update_validation'] = array(
     array(
         'field' => 'ECLASS',
         'label' => 'Class',
-        'rules' => 'required|integer|callback__valid_eclass'
+        'rules' => 'required|integer'
     ),
     array(
         'field' => 'WIDOW_IND',

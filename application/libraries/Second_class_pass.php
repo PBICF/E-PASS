@@ -78,8 +78,8 @@ final class Second_class_pass extends tFPDF {
     }
 
     public function from($english_text, $hindi_text) {
-        $this->mixed_text($hindi_text, $english_text, 26, 52, self::FONT_SIZE_SMALL);
-        $this->mixed_text($hindi_text, $english_text, 80, 55, self::FONT_SIZE_SMALL);
+        $this->mixed_text('', $english_text, 26, 52, self::FONT_SIZE_SMALL);
+        $this->mixed_text('', $english_text, 80, 55, self::FONT_SIZE_SMALL);
         return $this;
     }
 

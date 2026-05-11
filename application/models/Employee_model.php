@@ -20,7 +20,16 @@ class Employee_model extends CI_Model {
 
     public function find(int $empno)
     {
-        return $this->db->select("
+        $username = $this->session->userdata('username');
+        $unit = null;
+
+        if ($username === 'accounts') {
+            $unit = '75';
+        } elseif ($username === 'security') {
+            $unit = '79';
+        }
+
+        $query = $this->db->select("
                 EMP.*,
                 EMPTYPEMR.EDETAILS,
                 TO_CHAR(EMP.DTBIRTH, 'DD/MM/YYYY') AS DTBIRTH,
@@ -28,10 +37,16 @@ class Employee_model extends CI_Model {
                 TO_CHAR(EMP.DTRETT, 'DD/MM/YYYY') AS DTRETT,
             ", false)
             ->from($this->table)
-            ->where('EMPNO', $empno)
-            ->join('EMPTYPEMR', 'EMPTYPEMR.ETYPE = EMP.EMPTYPE', 'left')
+            ->where('EMPNO', $empno);
+
+        if($unit !== null) {
+            $query->like('EMP.UNIT', $unit);
+        }
+
+        return $query->join('EMPTYPEMR', 'EMPTYPEMR.ETYPE = EMP.EMPTYPE', 'left')
             ->get()
             ->row_array();
+        
     }
 
     public function is_serving(int $employee_no)

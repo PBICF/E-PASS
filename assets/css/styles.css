@@ -49,7 +49,11 @@ body {
 }
 
 /* Headings */
-h1, h2, h3, h4, h5 {
+h1,
+h2,
+h3,
+h4,
+h5 {
     font-weight: 600;
 }
 
@@ -190,7 +194,8 @@ h1, h2, h3, h4, h5 {
 }
 
 .custom-check:checked {
-    background-color: #E2433B; /* blue */
+    background-color: #E2433B;
+    /* blue */
     border-color: #E2433B;
 }
 
@@ -204,10 +209,10 @@ h1, h2, h3, h4, h5 {
     background: linear-gradient(135deg, #dc3545, #fd7e14) !important;
 }
 
-.ui-state-active, 
-.ui-widget-content .ui-state-active, 
-.ui-widget-header .ui-state-active, 
-a.ui-button:active, 
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active,
+a.ui-button:active,
 .ui-button:active {
     color: #ffffff;
     border: 1px solid #dc3545;
@@ -220,11 +225,12 @@ a.ui-button:active,
 
 .ui-datepicker .ui-datepicker-prev-hover {
     top: 2px !important;
-	left: 2px !important;
+    left: 2px !important;
 }
+
 .ui-datepicker .ui-datepicker-next-hover {
     top: 2px !important;
-	right: 2px !important;
+    right: 2px !important;
 }
 
 .ui-widget-header a {
@@ -236,10 +242,10 @@ a.ui-datepicker-prev.ui-corner-all,
 a.ui-datepicker-next.ui-corner-all,
 a.ui-datepicker-prev .ui-state-hover .ui-datepicker-prev-hover,
 a.ui-datepicker-next .ui-state-hover .ui-datepicker-next-hover {
-	border: 0px solid transparent;
-	background: transparent;
-	font-weight: normal;
-	color: #f8fafc;
+    border: 0px solid transparent;
+    background: transparent;
+    font-weight: normal;
+    color: #f8fafc;
     cursor: pointer;
     font-weight: bold;
 }
@@ -268,6 +274,7 @@ a.ui-datepicker-next .ui-state-hover .ui-datepicker-next-hover {
     background: linear-gradient(135deg, #6f42c1, #d63384);
     color: #fff;
 }
+
 /* SweetAlert2 */
 .swal2-popup .swal2-icon {
     font-size: 0.55rem !important;
@@ -289,4 +296,24 @@ a.ui-datepicker-next .ui-state-hover .ui-datepicker-next-hover {
 .swal2-container button.swal2-styled.swal2-confirm {
     /* background-color: var(--bs-primary) !important; */
     background-color: #dc3545 !important;
+}
+
+/* FIRST CLASS */
+.pass-type.pass-type-1 {
+    background-color: rgb(167, 250, 156) !important;
+}
+
+/* SECOND CLASS */
+.pass-type.pass-type-2 {
+    background-color: rgb(252, 190, 201) !important;
+}
+
+/* FIRST CLASS - A */
+.pass-type.pass-type-3 {
+    background-color: rgb(255, 255, 255) !important;
+}
+
+/* SECOND CLASS - A */
+.pass-type.pass-type-4 {
+    background-color: rgb(247, 245, 124) !important;
 }

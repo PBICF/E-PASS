@@ -460,3 +460,28 @@ if(! function_exists('next_pass_number')) {
         return $CI->Trans_model->next_pass_number($employee_no);
     }
 }
+
+if(! function_exists('session')) {
+    /**
+     * Get or set session data
+     *
+     * @param string|null $key
+     * @param mixed $value
+     * @return mixed
+     */
+    function session($key = null, $value = null)
+    {
+        $CI =& get_instance();
+        
+        if ($key === null) {
+            return $CI->session;
+        }
+        
+        if ($value !== null) {
+            $CI->session->set_userdata($key, $value);
+            return null;
+        }
+        
+        return $CI->session->userdata($key);
+    }
+}

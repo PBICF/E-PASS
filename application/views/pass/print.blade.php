@@ -33,7 +33,7 @@
 
     @if (isset($empno))
     <div class="row justify-content-center mt-4">
-        <div class="col-12 col-lg-10">
+        <div class="col-12 col-lg-12">
             <div class="card border-1 rounded-6">
                 <div class="card-header bg-white">
                     <strong>Pass List for Employee: {{ $empno }}</strong>
@@ -51,6 +51,8 @@
                                     <th>Valid To</th>
                                     <th>Class</th>
                                     <th>Passangers</th>
+                                    <th>Pass Year</th>
+                                    <th>Single/Return</th>
                                     <th>Is Canceled</th>
                                     <th style="width: 110px;">Action</th>
                                 </tr>
@@ -61,10 +63,30 @@
                                     <td>{{ $pass['PASSNO'] }}</td>
                                     <td>{{ $pass['FRSTN'] }}</td>
                                     <td>{{ $pass['TOSTN'] }}</td>
-                                    <td>{{ $pass['PVALIDFR'] }}</td>
-                                    <td>{{ $pass['PVALIDTO'] }}</td>
-                                    <td>{{ $pass['PCLASS'] }}</td>
+                                    <td>{{ $pass['VALIDFR'] }}</td>
+                                    <td>{{ $pass['VALIDTO'] }}</td>
+                                    <td>
+                                        @if($pass['TCLASS'] == '1')
+                                            First Class
+                                        @elseif($pass['TCLASS'] == '2')
+                                            Second Class
+                                        @elseif($pass['TCLASS'] == '3')
+                                            First Class - A
+                                        @elseif($pass['TCLASS'] == '4')
+                                            Second Class - A
+                                        @else
+                                            Unknown
+                                        @endif
+                                    </td>
+                                    <td>{{ $pass['ACYEAR'] }}</td>
                                     <td>{{ $pass['DEPEND1'] }}{{ $pass['DEPEND2'] }}</td>
+                                    <td>
+                                        @if($pass['RETURNIND'] == 1)
+                                            <span class="badge bg-danger">Single</span>
+                                        @else
+                                            <span class="badge bg-success">Return</span>
+                                        @endif
+                                    </td>
                                     <td class="text-center">
                                         @if($pass['TCANCEL'])
                                             <span class="badge bg-danger">Canceled</span>

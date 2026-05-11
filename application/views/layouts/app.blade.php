@@ -32,6 +32,11 @@
                         <h2 class="title text-lg font-semibold">@yield('title', 'App')</h2>
                     </div>
                 </a>
+
+                @if(session('logged_in'))
+                <a class="text-white" href="{{ base_url('auth/logout') }}">logout</a>
+                @endif
+
                 <button
                     class="theme-toggle d-none"
                     x-on:click="toggleTheme()"

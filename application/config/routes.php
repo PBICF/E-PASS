@@ -58,6 +58,11 @@ $route['api/routes']                = 'Ajax_Controller/routes';
 $route['api/pass/(:num)']           = 'Ajax_Controller/get_pass/$1';
 $route['api/pass/details']          = 'Ajax_Controller/get_pass_details';
 
+// Auth
+$route['auth/login']                = 'Auth_Controller/login';
+$route['auth/logout']               = 'Auth_Controller/logout';
+$route['auth/process']              = 'Auth_Controller/process';
+
 // Pass creation
 $route['pass/create']               = 'Pass_Controller/create';
 $route['pass/submit']               = 'Pass_Controller/submit';  

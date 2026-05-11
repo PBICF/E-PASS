@@ -78,7 +78,7 @@ class Trans_model extends CI_Model {
                 return true;
             }
         } catch (\Exception $e) {
-            throw 'Unable to cancel the pass. ' . $e->getMessage();
+            throw new Exception('Unable to cancel the pass. ' . $e->getMessage());
         }
     }
 
@@ -177,11 +177,11 @@ class Trans_model extends CI_Model {
             $this->db->set('VIA' . ($index + 1), empty($station) ? null : strtoupper($station));
         }
 
-        if($different_return_via === 'N') {
+        if($different_return_via === 'N' && $data['single_return'] != '1') {
             foreach(array_reverse(filter_array($data['via'])) as $index => $station) {
                 $this->db->set('RVIA' . ($index + 1), empty($station) ? null : strtoupper($station));
             }
-        } else {
+        } else if($data['single_return'] != '1') {
             foreach($data['return_via'] as $index => $station) {
                 $this->db->set('RVIA' . ($index + 1), empty($station) ? null : strtoupper($station));
             }

@@ -7,7 +7,7 @@
  * @property Station_model $station
  * @property Trans_model $trans
  */
-class Update_Controller extends CI_Controller {
+class Update_Controller extends MY_Controller {
 
     public function __construct()
     {
@@ -117,10 +117,5 @@ class Update_Controller extends CI_Controller {
     function _valid_emptype($value)
     {
         return $this->employee->status->is_valid($value);
-    }
-
-    public function _valid_eclass($value)
-    {
-        return $this->classes->is_valid($value);
     }
 }

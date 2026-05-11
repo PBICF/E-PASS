@@ -80,14 +80,14 @@ final class Second_AC_class_pass extends tFPDF {
     }
 
     public function from($english_text, $hindi_text) {
-        $this->mixed_text($hindi_text, $english_text, 18, 71, self::FONT_SIZE_SMALL);
-        $this->mixed_text($hindi_text, $english_text, 135, 60, self::FONT_SIZE_SMALL);
+        $this->mixed_text('', $english_text, 18, 71, self::FONT_SIZE_SMALL);
+        $this->mixed_text('', $english_text, 135, 60, self::FONT_SIZE_SMALL);
         return $this;
     }
 
     public function destination($english_text, $hindi_text) {
-        $this->mixed_text($hindi_text, $english_text, 70, 71, self::FONT_SIZE_SMALL);
-        $this->mixed_text($hindi_text, $english_text, 186, 60, self::FONT_SIZE_SMALL);
+        $this->mixed_text('', $english_text, 70, 71, self::FONT_SIZE_SMALL);
+        $this->mixed_text('', $english_text, 186, 60, self::FONT_SIZE_SMALL);
         return $this;
     }
 

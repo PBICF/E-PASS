@@ -8,7 +8,7 @@
  * @property Trans_model $trans
  * @property PRoute_model $route
  */
-class Pass_Controller extends CI_Controller {
+class Pass_Controller extends MY_Controller {
 
     public function __construct()
     {

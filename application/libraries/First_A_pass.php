@@ -79,20 +79,20 @@ final class First_A_pass extends tFPDF {
     }
 
     public function desigination($designation) {
-        //$this->add_text($designation, 66, 59, self::FONT_SIZE_SMALL);
+        $this->add_text($designation, 66, 59, self::FONT_SIZE_SMALL);
         $this->add_text($designation, 172, 57, self::FONT_SIZE_SMALL);
         return $this;
     }
 
     public function from($english_text, $hindi_text) {
-        $this->mixed_text($hindi_text, $english_text, 22, 51, self::FONT_SIZE_SMALL);
-        $this->mixed_text($hindi_text, $english_text, 79, 60, self::FONT_SIZE_SMALL);
+        $this->mixed_text('', $english_text, 22, 51, self::FONT_SIZE_SMALL);
+        $this->mixed_text('', $english_text, 79, 60, self::FONT_SIZE_SMALL);
         return $this;
     }
 
     public function destination($english_text, $hindi_text) {
-        $this->mixed_text($hindi_text, $english_text, 22, 54, self::FONT_SIZE_SMALL);
-        $this->mixed_text($hindi_text, $english_text, 154, 60, self::FONT_SIZE_SMALL);
+        $this->mixed_text('', $english_text, 22, 54, self::FONT_SIZE_SMALL);
+        $this->mixed_text('', $english_text, 154, 60, self::FONT_SIZE_SMALL);
         return $this;
     }
 

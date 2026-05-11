@@ -32,6 +32,17 @@ function handleStationCodeInput(element, selector, callback = null) {
 document.addEventListener('DOMContentLoaded', function () {
     let allowBack = false;
     history.pushState(null, "", location.href);
+    const singleReturn = document.querySelector('[name="single_return"]');
+
+    singleReturn.addEventListener('change', (e) => {
+        if(e.target.value == '1') {
+            document.querySelectorAll('[name="return_via[]"]').forEach((item) => item.value = '');
+            document.querySelectorAll('[name="break_journey_return[]"]').forEach((item) => item.value = '');
+        }
+
+        syncReturnFromBreak();
+        syncReturnFromVia();
+    });
 
     window.addEventListener("popstate", function (event) {
         if (allowBack) {
@@ -163,6 +174,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const differentReturnCheckbox = document.getElementById('different_return_via');
 
     function syncReturnFromBreak() {
+        const singleReturn = document.querySelector('[name="single_return"]');
+        if (singleReturn && singleReturn.value === '1') {
+            return;
+        }
         const breakInputs = Array.from(document.querySelectorAll('[name="break_journey[]"]'));
         const returnInputs = Array.from(document.querySelectorAll('[name="break_journey_return[]"]'));
 
@@ -183,6 +198,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Helper: sync return_via[] from via[] (reverse order) when "Different Return via?" is NOT checked
     function syncReturnFromVia() {
+        const singleReturn = document.querySelector('[name="single_return"]');
+        if (singleReturn && singleReturn.value === '1') {
+            return;
+        }
         const viaInputs = Array.from(document.querySelectorAll('[name="via[]"]'));
         const returnInputs = Array.from(document.querySelectorAll('[name="return_via[]"]'));
 
