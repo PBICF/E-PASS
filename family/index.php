@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['family_logged_in']) || $_SESSION['family_logged_in'] !== true) {
+    header('Location: login.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +31,7 @@
             <div class="form-group">
                 <label class="form-label small fw-bold">Employee No.</label>
                 <input type="text" class="form-control form-control-sm" x-mask="999999" 
-                    x-model="empno" placeholder="Emp No." @keydown.enter.prevent="inquire()">
+                    x-model="empno" placeholder="Emp No." @keydown.enter.prevent="inquire()" @keydown.tab.prevent="inquire()">
                 <input type="hidden" x-model="lastEmpno">
             </div>
         </div>

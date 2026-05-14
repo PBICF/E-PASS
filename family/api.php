@@ -1,4 +1,10 @@
 <?php
+session_start();
+if (!isset($_SESSION['family_logged_in']) || $_SESSION['family_logged_in'] !== true) {
+    http_response_code(401);
+    echo json_encode(['error' => 'Unauthorized access']);
+    exit;
+}
 require_once 'database.php';
 
 header('Content-Type: application/json');
