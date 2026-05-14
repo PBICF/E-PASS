@@ -27,7 +27,7 @@ class Database
 
     public function __construct()
     {
-        $this->connect('oci:dbname=//10.0.240.77:1521/pbicf', 'qrs', 'occupy123');
+        $this->connect('oci:dbname=//10.0.240.77:1521/pbicf', 'pass', 'alrs');
     }
 
     public static function getInstance()
