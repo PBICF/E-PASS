@@ -10,8 +10,8 @@
                     <div class="form-group mb-3">
                         <label class="form-label">Employee No.</label>
                         <input type="text" name="EMPNO" class="form-control form-control-sm" x-mask="999999" required
-                            x-model="empno" placeholder="Enter Employee No." x-on:keydown.enter.prevent="inquire"
-                            x-on:keydown.tab.prevent="inquire" />
+                            x-model="empno" placeholder="Enter Employee No." x-on:keydown.enter.prevent="inquire()"
+                            x-on:keydown.tab.prevent="inquire()" />
                         {{-- stores the last successfully-inquired empno --}}
                         <input type="hidden" name="LAST_EMPNO" x-model="lastEmpno">
                     </div>
@@ -188,6 +188,7 @@
                 },
 
                 inquire(empno = null) {
+                    if (empno instanceof Event) empno = null;
                     const target = empno ?? this.empno;
                     if (!target || target.toString().trim() == '') return;
                     fetch("{{ site_url('api/employees/inquire') }}", {
