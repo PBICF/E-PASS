@@ -31,7 +31,7 @@ class Ajax_Controller extends CI_Controller {
     public function inquire()
     {
         $empno = $this->input->post('empno', true);
-        if(empty($empno) && !is_numeric($empno)) {
+        if(empty($empno) || !is_numeric($empno)) {
             return $this->output
                 ->set_status_header(400)
                 ->set_content_type('application/json')
@@ -40,6 +40,8 @@ class Ajax_Controller extends CI_Controller {
                     'code'  => 400
                 ]));
         }
+
+        $empno = (int) $empno;
 
         $employee = $this->employee->find($empno);
         if(empty($employee)) {
@@ -76,7 +78,7 @@ class Ajax_Controller extends CI_Controller {
     public function get_family()
     {
         $empno = $this->input->post('empno', true);
-        if(empty($empno) && !is_numeric($empno)) {
+        if(empty($empno) || !is_numeric($empno)) {
             return $this->output
                 ->set_status_header(400)
                 ->set_content_type('application/json')
@@ -86,6 +88,7 @@ class Ajax_Controller extends CI_Controller {
                 ]));
         }
 
+        $empno = (int) $empno;
         $family = $this->employee->family->find($empno);
         return $this->output
                 ->set_status_header(200)
@@ -101,15 +104,18 @@ class Ajax_Controller extends CI_Controller {
         $empno = $this->input->post('empno', true);
         $fslno = $this->input->post('fslno', true);
 
-        if(empty($empno) && !is_numeric($empno)) {
+        if((empty($empno) || !is_numeric($empno)) || (empty($fslno) || !is_numeric($fslno))) {
             return $this->output
                 ->set_status_header(400)
                 ->set_content_type('application/json')
                 ->set_output(json_encode([
-                    'error' => 'Invalid or Missing Employee Number',
+                    'error' => 'Invalid or Missing Parameters',
                     'code'  => 400,
                 ]));
         }
+
+        $empno = (int) $empno;
+        $fslno = (int) $fslno;
 
         if($this->form_validation->run('family_update_validation') === false) {
             $this->form_validation->set_error_delimiters('', '');
@@ -136,7 +142,7 @@ class Ajax_Controller extends CI_Controller {
     {
         $empno = $this->input->post('empno', true);
 
-        if(empty($empno) && !is_numeric($empno)) {
+        if(empty($empno) || !is_numeric($empno)) {
             return $this->output
                 ->set_status_header(400)
                 ->set_content_type('application/json')
@@ -145,6 +151,8 @@ class Ajax_Controller extends CI_Controller {
                     'code'  => 400,
                 ]));
         }
+
+        $empno = (int) $empno;
 
         if($this->form_validation->run('family_add_validation') === false) {
             $this->form_validation->set_error_delimiters('', '');
