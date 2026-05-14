@@ -46,6 +46,42 @@ class Family_model extends CI_Model {
             ->result_array();
     }
 
+    public function nextSlno(int $empno): int
+    {
+        $row = $this->db
+            ->select_max('FSLNO', 'max_fslno')
+            ->from($this->table)
+            ->where('EMPNO', $empno)
+            ->get()
+            ->row_array();
+
+        return isset($row['max_fslno']) && $row['max_fslno'] !== null
+            ? (int) $row['max_fslno'] + 1
+            : 1;
+    }
+
+    public function insert(int $empno, array $data): void
+    {
+        $fslno = $this->nextSlno($empno);
+
+        $row = [
+            'EMPNO'     => $empno,
+            'FSLNO'     => $fslno,
+            'NAME'      => $data['name']      ?? null,
+            'FRELATION' => $data['frelation'] ?? null,
+            'FALLOWED'  => $data['fallowed']  ?? 'N',
+        ];
+
+        $db_val = $data['db'] ?? '';
+        if (!empty(trim((string)$db_val))) {
+            $this->db->set('DB', "TO_DATE('{$db_val}', 'DD/MM/YYYY')", false);
+        } else {
+            $this->db->set('DB', 'NULL', false);
+        }
+
+        $this->db->insert($this->table, $row);
+    }
+
     public function update(int $empno, int $fslno, $data)
     {
         foreach($data as $column => $value) {

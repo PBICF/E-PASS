@@ -132,6 +132,41 @@ class Ajax_Controller extends CI_Controller {
                 ]));
     }
 
+    public function add_family()
+    {
+        $empno = $this->input->post('empno', true);
+
+        if(empty($empno) && !is_numeric($empno)) {
+            return $this->output
+                ->set_status_header(400)
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'error' => 'Invalid or Missing Employee Number',
+                    'code'  => 400,
+                ]));
+        }
+
+        if($this->form_validation->run('family_add_validation') === false) {
+            $this->form_validation->set_error_delimiters('', '');
+            return $this->output
+                ->set_status_header(400)
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'error' => validation_errors('', ''),
+                    'code'  => 400,
+                ]));
+        }
+
+        $this->employee->family->insert((int)$empno, $this->input->post());
+        return $this->output
+                ->set_status_header(200)
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'code'    => 200,
+                    'success' => 'Family member has been successfully added.',
+                ]));
+    }
+
     public function get_pass(int $pass_number)
     {
         if ($this->input->method() === 'post') {

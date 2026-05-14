@@ -248,3 +248,31 @@ $config['family_update_validation'] = array(
         'rules' => 'required|in_list[Y,N]'
     ),
 );
+
+$config['family_add_validation'] = array(
+    array(
+        'field' => 'empno',
+        'label' => 'Employee No',
+        'rules' => 'required|integer|exact_length[6]'
+    ),
+    array(
+        'field' => 'name',
+        'label' => 'Name',
+        'rules' => 'required'
+    ),
+    array(
+        'field' => 'frelation',
+        'label' => 'Relationship',
+        'rules' => 'required'
+    ),
+    array(
+        'field' => 'db',
+        'label' => 'Date of Birth',
+        'rules' => 'callback__valid_date'
+    ),
+    array(
+        'field' => 'fallowed',
+        'label' => 'F Allowed',
+        'rules' => 'required|in_list[Y,N]'
+    ),
+);

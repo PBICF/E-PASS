@@ -54,6 +54,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['api/employees/inquire']     = 'Ajax_Controller/inquire';
 $route['api/employee/family']       = 'Ajax_Controller/get_family';
 $route['api/family/update']         = 'Ajax_Controller/update_family';
+$route['api/family/add']            = 'Ajax_Controller/add_family';
 $route['api/routes']                = 'Ajax_Controller/routes';
 $route['api/pass/(:num)']           = 'Ajax_Controller/get_pass/$1';
 $route['api/pass/details']          = 'Ajax_Controller/get_pass_details';
