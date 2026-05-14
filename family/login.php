@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($username === $valid_username && $password === $valid_password) {
         $_SESSION['family_logged_in'] = true;
+        $_SESSION['username'] = $username;
         header('Location: index.php');
         exit;
     } else {

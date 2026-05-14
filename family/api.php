@@ -57,6 +57,13 @@ try {
                 exit;
             }
 
+            // Get old data for audit
+            $old_row = $db->from('FAMILY')
+                ->select("NAME, FRELATION, TO_CHAR(DB, 'DD/MM/YYYY') as DB, FALLOWED")
+                ->where('EMPNO', $empno)
+                ->where('FSLNO', $fslno)
+                ->row();
+
             $db->from('FAMILY')
                 ->where('EMPNO', $empno)
                 ->where('FSLNO', $fslno)
@@ -65,6 +72,27 @@ try {
                 ->setRaw('DB', "TO_DATE('$db_val', 'DD/MM/YYYY')")
                 ->set('FALLOWED', $fallowed)
                 ->update();
+
+            // Audit Log
+            if ($old_row) {
+                $audit_sql = "INSERT INTO FAMILY_AUDIT (
+                    EMPNO, FSLNO, ACTION, 
+                    OLD_NAME, NEW_NAME, 
+                    OLD_REL, NEW_REL, 
+                    OLD_DB, NEW_DB, 
+                    OLD_ALLOWED, NEW_ALLOWED, 
+                    CHANGED_BY
+                ) VALUES (?, ?, 'UPDATE', ?, ?, ?, ?, TO_DATE(?, 'DD/MM/YYYY'), TO_DATE(?, 'DD/MM/YYYY'), ?, ?, ?)";
+                
+                $db->query($audit_sql, [
+                    $empno, $fslno, 
+                    $old_row->name, $name,
+                    $old_row->frelation, $frelation,
+                    $old_row->db, $db_val,
+                    $old_row->fallowed, $fallowed,
+                    $_SESSION['username'] ?? 'SYSTEM'
+                ]);
+            }
 
             echo json_encode(['success' => 'Record updated successfully', 'code' => 200]);
             break;
@@ -95,6 +123,19 @@ try {
                     VALUES (?, ?, ?, ?, TO_DATE(?, 'DD/MM/YYYY'), ?)";
             
             $db->query($sql, [$empno, $next_sl, $name, $frelation, $db_val, $fallowed]);
+
+            // Audit Log
+            $audit_sql = "INSERT INTO FAMILY_AUDIT (
+                EMPNO, FSLNO, ACTION, 
+                NEW_NAME, NEW_REL, NEW_DB, NEW_ALLOWED, 
+                CHANGED_BY
+            ) VALUES (?, ?, 'INSERT', ?, ?, TO_DATE(?, 'DD/MM/YYYY'), ?, ?)";
+
+            $db->query($audit_sql, [
+                $empno, $next_sl, 
+                $name, $frelation, $db_val, $fallowed,
+                $_SESSION['username'] ?? 'SYSTEM'
+            ]);
 
             echo json_encode(['success' => 'Member added successfully', 'code' => 200]);
             break;

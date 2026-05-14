@@ -377,10 +377,9 @@ if(! function_exists('dump')) {
      * Dump data and terminate script
      * @param mixed ...$data
      */
-    function dump()
+    function dump(...$data)
     {
-        $args = func_get_args();
-        foreach ($args as $data) {
+        foreach ($data as $data) {
             prity_print($data);
         }
     }
