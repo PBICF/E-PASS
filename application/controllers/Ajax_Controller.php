@@ -5,6 +5,7 @@
  * @property Account_model $account
  * @property PRoute_model $route
  * @property Trans_model $trans
+ * @property Department_model $department
  */
 class Ajax_Controller extends CI_Controller {
 
@@ -44,6 +45,53 @@ class Ajax_Controller extends CI_Controller {
         $empno = (int) $empno;
 
         $employee = $this->employee->find($empno);
+        if(empty($employee)) {
+            return $this->output
+                ->set_status_header(404)
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'error' => 'Employee Not Found',
+                    'code'  => 400
+                ]));
+        }
+
+        $passes = $this->account->findPassByEmp($empno);
+        $ptos = $this->account->findPtoByEmp($empno);
+        $second_pass = $this->account->findSecondPassByEmp($empno);
+        $family = $this->employee->family->find($empno);
+        $is_serving  = $this->employee->is_serving($empno);
+        
+        return $this->output
+                ->set_status_header(200)
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'employee' => array_change_key_case($employee),
+                    'passes' => array_change_key_case_recursive($passes),
+                    'ptos' => array_change_key_case_recursive($ptos),
+                    'second_pass' => array_change_key_case_recursive($second_pass),
+                    'family' => array_change_key_case_recursive($family),
+                    'next_pass_number' => next_pass_number($empno),
+                    'is_serving' => $is_serving,
+                    'code'  => 200
+                ]));
+    }
+
+    public function get_employee_data()
+    {
+        $empno = $this->input->post('empno', true);
+        if(empty($empno) || !is_numeric($empno)) {
+            return $this->output
+                ->set_status_header(400)
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'error' => 'Invalid or Missing Employee Number',
+                    'code'  => 400
+                ]));
+        }
+
+        $empno = (int) $empno;
+
+        $employee = $this->employee->find_by_number($empno);
         if(empty($employee)) {
             return $this->output
                 ->set_status_header(404)

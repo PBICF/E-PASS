@@ -214,6 +214,11 @@ $config['employee_update_validation'] = array(
         'label' => 'Cell Number',
         'rules' => 'required|integer|exact_length[10]'
     ),
+    array(
+        'field' => 'DEPT',
+        'label' => 'Department',
+        'rules' => 'required'
+    ),
 );
 
 $config['family_update_validation'] = array(

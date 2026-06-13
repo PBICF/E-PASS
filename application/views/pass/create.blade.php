@@ -399,7 +399,6 @@
                             <option value="">-- SELECT PASS TYPE --</option>                                
 
                             @foreach ($pass_types as $type)
-                                @if($type['TCODE'] != 2)
                                     <option
                                         value="{{ $type['TCODE'] }}"
                                         :disabled="
@@ -408,7 +407,6 @@
                                         ">
                                         {{ $type['TNAME'] }}
                                     </option>
-                                @endif
                             @endforeach
 
                         </select>
@@ -665,6 +663,9 @@ if((int) date('Y') == (int) old_input('account_year') ) {
             routes: [],
             currentStep: {{ $current_tab }},
             validityTo: "{{ $validity_to }}",
+            reload() {
+                location.reload();
+            },
             selectedMembers: (function() {
                 try {
                     if (Array.isArray(oldMembers)) return oldMembers.map(String);
@@ -703,6 +704,22 @@ if((int) date('Y') == (int) old_input('account_year') ) {
                             showCancelButton: true,
                             message: 'Please enter Employee No and click Inquire before proceeding to Family Details.',
                         });
+                        return;
+                    }
+
+                    if(this.employee.emptype == 99) {
+                        let result = await swalAlert({
+                            icon: 'error',
+                            title: 'Manual PASS Not Allowed',
+                            showCancelButton: true,
+                            confirmButtonText: 'Yes, understand',
+                            message: 'Manual PASS cannot be generated for the selected employee type. Please go through via HRMS.',
+                        });
+
+                        if (result.isConfirmed) {
+                            this.reload();
+                        }
+
                         return;
                     }
 

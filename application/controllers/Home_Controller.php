@@ -115,6 +115,8 @@ class Home_Controller extends MY_Controller {
 	        return custom_404();
 	    }
 
+		//die($pass_details['PCLASS']);
+		
 		if($pass_details['PCLASS'] == 'First') {
 			return $this->FCP->generate($pass_details);
 		} else if($pass_details['PCLASS'] == 'Second-A') {

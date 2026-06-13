@@ -17,6 +17,7 @@ class Update_Controller extends MY_Controller {
         $this->load->model('Station_model', 'station');
         $this->load->model('Trans_model', 'trans');
         $this->load->model('Account_model', 'account');
+        $this->load->model('Department_model', 'department');
     }
 
     public function pass_account()
@@ -64,10 +65,12 @@ class Update_Controller extends MY_Controller {
 
         $estatus = $this->employee->status->all();
         $pass_types = $this->pass_type->all();
+        $departments = $this->department->get_all();
 
         return view('update.employee', compact(
             'estatus',
             'pass_types',
+            'departments',
         ));
     }
 

@@ -14,6 +14,16 @@ class Pass_type_model extends CI_Model {
             ", FALSE)
             ->from($this->table)
             ->where('TCODE !=', 0)
+            ->where('ALLOWED !=', 'N')
+            ->get()
+            ->result_array();
+    }
+
+    public function get_all()
+    {
+        return $this->db
+            ->select("*")
+            ->from($this->table)
             ->get()
             ->result_array();
     }

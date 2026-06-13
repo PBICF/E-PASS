@@ -131,17 +131,39 @@
                         </div>
 
                         <div class="row mb-3">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label class="form-label">ID Card No</label>
                                 <input type="text" class="form-control form-control-sm" />
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label class="form-label">Widow Pass Eligibility</label>
                                 <select class="form-select form-select-sm" name="WIDOW_IND" x-model="employee.widow_ind">
                                     <option value="1">Alternative Year</option>
                                     <option value="2">Every Year</option>
                                     <option value="3">Not Applicable</option>
                                 </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Department</label>
+                                <select class="form-select form-select-sm" name="DEPT" x-model="employee.dept">
+                                    @foreach ($departments as $d)
+                                        <option value="{{ $d['DCODE'] }}">{{ $d['DNAME'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Address 1</label>
+                                <input type="text" class="form-control form-control-sm" name="ADD1" x-model="employee.add1" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Address 2</label>
+                                <input type="text" class="form-control form-control-sm" name="ADD2" x-model="employee.add2" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Address 3</label>
+                                <input type="text" class="form-control form-control-sm" name="ADD3" x-model="employee.add3" />
                             </div>
                         </div>
                     </div>
@@ -181,6 +203,10 @@
                 emptype: '',
                 remarks: '',
                 widow_ind: '',
+                add1: '',
+                add2: '',
+                add3: '',
+                dept: '',
             },
             clear() {
                 this.employee = {
@@ -200,12 +226,16 @@
                     emptype: '',
                     remarks: '',
                     widow_ind: '',
+                    add1: '',
+                    add2: '',
+                    add3: '',
+                    dept: '',
                 };
             },
             inquire() {
                 let empno = this.employee.empno;
                 if(empno?.trim() == '' || empno == null) return;
-                fetch("{{ site_url('api/employees/inquire') }}", {
+                fetch("{{ site_url('api/employees/data') }}", {
                     method: 'POST',
                     body: new URLSearchParams({ empno })
                 })

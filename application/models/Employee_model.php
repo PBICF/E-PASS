@@ -21,12 +21,12 @@ class Employee_model extends CI_Model {
     public function find(int $empno)
     {
         $username = $this->session->userdata('username');
-        $unit = null;
+        $department = null;
 
         if ($username === 'accounts') {
-            $unit = '75';
+            $department = '1';
         } elseif ($username === 'security') {
-            $unit = '79';
+            $department = '7';
         }
 
         $query = $this->db->select("
@@ -39,9 +39,40 @@ class Employee_model extends CI_Model {
             ->from($this->table)
             ->where('EMPNO', $empno);
 
-        if($unit !== null) {
-            $query->like('EMP.UNIT', $unit);
+        if($department !== null) {
+            $query->like('EMP.DEPT', $department);
         }
+
+        return $query->join('EMPTYPEMR', 'EMPTYPEMR.ETYPE = EMP.EMPTYPE', 'left')
+            ->get()
+            ->row_array();
+        
+    }
+
+    public function find_by_number(int $empno)
+    {
+        $username = $this->session->userdata('username');
+        $department = null;
+
+        // if ($username === 'accounts') {
+        //     $department = '1';
+        // } elseif ($username === 'security') {
+        //     $department = '7';
+        // }
+
+        $query = $this->db->select("
+                EMP.*,
+                EMPTYPEMR.EDETAILS,
+                TO_CHAR(EMP.DTBIRTH, 'DD/MM/YYYY') AS DTBIRTH,
+                TO_CHAR(EMP.DTAPPT, 'DD/MM/YYYY') AS DTAPPT,
+                TO_CHAR(EMP.DTRETT, 'DD/MM/YYYY') AS DTRETT,
+            ", false)
+            ->from($this->table)
+            ->where('EMPNO', $empno);
+
+        // if($department !== null) {
+        //     $query->like('EMP.DEPT', $department);
+        // }
 
         return $query->join('EMPTYPEMR', 'EMPTYPEMR.ETYPE = EMP.EMPTYPE', 'left')
             ->get()

@@ -162,6 +162,16 @@ final class First_A_pass extends tFPDF {
         return $this;
     }
 
+    public function remark1($remark1) {
+        $this->add_text($remark1, 250, 50, self::FONT_SIZE_SMALL);
+        return $this;
+    }
+    
+    public function remark2($remark2) {
+        $this->add_text($remark2, 250, 60, self::FONT_SIZE_SMALL);
+        return $this;
+    }
+
     public function string($text, $x, $y, $type = '', $width = 100, $height = 4) {
         $this->add_text($text, $x, $y, self::FONT_SIZE_SMALL, self::FONT, $width, $height, $type);
         return $this;
@@ -214,9 +224,15 @@ final class First_A_pass extends tFPDF {
         $this->destination($params['TOSTN'], $params['TOSTN_HINDI']);
 
 		$this->via($params['VIASTNS']);
-		// $this->return_from($params['TOSTN'], $params['TOSTN_HINDI']);
-		// $this->return_to($params['FRSTN'], $params['FRSTN_HINDI']);
-		$this->return_via($params['RVIASTNS']);
+
+        if($params['RETURNIND'] == '2') {
+            // $this->return_from($params['TOSTN'], $params['TOSTN_HINDI']);
+            // $this->return_to($params['FRSTN'], $params['FRSTN_HINDI']);
+            $this->return_via($params['RVIASTNS']);
+        }
+
+        $this->remark1($params['REMARKS1']);
+        $this->remark2($params['REMARKS2']);
 
 		$this->over_railway($params['RLYSET']);
 		$this->outward_journey_dt('--');

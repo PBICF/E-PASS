@@ -52,12 +52,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // AJAX / API
 $route['api/employees/inquire']     = 'Ajax_Controller/inquire';
+$route['api/employees/data']        = 'Ajax_Controller/get_employee_data';
 $route['api/employee/family']       = 'Ajax_Controller/get_family';
 $route['api/family/update']         = 'Ajax_Controller/update_family';
 $route['api/family/add']            = 'Ajax_Controller/add_family';
 $route['api/routes']                = 'Ajax_Controller/routes';
 $route['api/pass/(:num)']           = 'Ajax_Controller/get_pass/$1';
 $route['api/pass/details']          = 'Ajax_Controller/get_pass_details';
+
+// Admin
+$route['admin']                    = 'Admin_Controller/index';
+$route['admin/login']              = 'Admin_Controller/login';
+$route['admin/process_login']      = 'Admin_Controller/process_login';
+$route['admin/pass_type/update/(:num)'] = 'Admin_Controller/update_pass_type/$1';
 
 // Auth
 $route['auth/login']                = 'Auth_Controller/login';

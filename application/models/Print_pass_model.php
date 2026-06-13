@@ -24,11 +24,14 @@ class Print_pass_model extends CI_Model {
     }
 
     public function get_pass(int $passno) {
-        return $this->db->select("*")
-            ->where('PASSNO', $passno)
-            ->get($this->table)
+        return $this->db->select("PRINT_PASS.*, T.RETURNIND, T.R1, T.REMARKS1, T.REMARKS2")
+            ->where('PRINT_PASS.PASSNO', $passno)   // ← disambiguated
+            ->from($this->table)
+            ->join('TRANS T', 'PRINT_PASS.PASSNO = T.PASSNO')
+            ->get()
             ->row_array();
     }
+
 
     public function get_passes_by_empno(int $empno) {
         return $this->db->select('PASSNO, ENO, TTYPE, FRSTN, TOSTN, VALIDFR, VALIDTO, TCLASS, TCANCEL, DEPEND1, DEPEND2, RETURNIND, ACYEAR')
